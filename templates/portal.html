@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal — VPNTunel.my.id</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="Mid-client-seD_dfAph7_Yw6O7"></script>
+  <style>
+    .tab-page { display: none; }
+    .tab-page.active { display: block; }
+    .modal { display: none; }
+    .modal.open { display: flex; }
+    .nav-btn svg, .nav-btn span { color: #9ca3af; }
+    .nav-btn.active svg, .nav-btn.active span { color: #4f46e5; }
+  </style>
+</head>
+<body class="bg-slate-100 min-h-screen pb-20">
+
+  <!-- Navbar -->
+  <nav class="bg-gradient-to-r from-indigo-700 to-indigo-800 text-white sticky top-0 z-40 shadow-lg">
+    <div class="max-w-lg mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-2.5">
+        <div class="w-8 h-8 bg-white/20 rounded-xl flex items-center justify-center">
+          <i class="fa-solid fa-bolt text-sm"></i>
+        </div>
+        <div>
+          <span class="font-bold text-sm">VPNTunel.my.id</span>
+          <p class="text-indigo-300 text-xs leading-none">Portal Pelanggan</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="text-indigo-200 text-xs hidden sm:block">{{ p.nama }}</span>
+        <a href="/logout" class="bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-lg text-xs font-medium transition flex items-center gap-1.5">
+          <i class="fa-solid fa-right-from-bracket"></i> Keluar
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ═══════ TAB: HOME ═══════ -->
+  <div id="page-home" class="tab-page active max-w-lg mx-auto px-3 py-4">
+
+    <!-- Welcome Banner -->
+    <div class="bg-gradient-to-r from-indigo-600 to-indigo-700 rounded-2xl p-4 mb-4 text-white">
+      <div class="flex items-center gap-3">
+        <div class="w-11 h-11 bg-white/20 rounded-xl flex items-center justify-center text-xl font-bold flex-shrink-0">
+          {{ p.nama[0] | upper }}
+        </div>
+        <div class="flex-1 min-w-0">
+          <p class="font-bold truncate">{{ p.nama }}</p>
+          <p class="text-indigo-200 text-xs font-mono">{{ p.subdomain }}</p>
+        </div>
+        {% if tagihan.lunas %}
+        <span class="bg-emerald-400/30 border border-emerald-400/50 text-white text-xs font-bold px-2.5 py-1 rounded-full flex-shrink-0">
+          <i class="fa-solid fa-circle text-emerald-300 mr-1" style="font-size:6px"></i>Lunas
+        </span>
+        {% else %}
+        <span class="bg-amber-400/30 border border-amber-400/50 text-white text-xs font-bold px-2.5 py-1 rounded-full flex-shrink-0">
+          <i class="fa-solid fa-clock text-amber-300 mr-1" style="font-size:6px"></i>Belum Bayar
+        </span>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Info Cards -->
+    <div class="grid grid-cols-2 gap-3 mb-4">
+      <div class="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm">
+        <p class="text-xs text-gray-400 mb-1">Paket</p>
+        <p class="font-bold text-gray-800">{{ p.paket }}</p>
+        <p class="text-xs text-indigo-600 font-semibold">{{ format_rupiah(p.harga) }}/bln</p>
+      </div>
+      <div class="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm">
+        <p class="text-xs text-gray-400 mb-1">Jatuh Tempo</p>
+        <p class="font-bold text-gray-800">{{ expire_date }}</p>
+        <p class="text-xs text-gray-400">tgl {{ p.tanggal_bayar }} setiap bln</p>
+      </div>
+      <div class="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm col-span-2">
+        <div class="flex items-center justify-between mb-2">
+          <p class="text-xs text-gray-400">Slot VPN</p>
+          <span class="text-xs font-bold
+            {% if vpn_connections|length >= vpn_limit %}text-rose-500{% else %}text-emerald-600{% endif %}">
+            {{ vpn_connections|length }}/{{ vpn_limit }} terpakai
+          </span>
+        </div>
+        <!-- Progress bar -->
+        <div class="w-full bg-gray-100 rounded-full h-1.5 mb-2">
+          <div class="h-1.5 rounded-full {% if vpn_connections|length >= vpn_limit %}bg-rose-400{% else %}bg-indigo-500{% endif %}"
+            style="width: {{ [(vpn_connections|length / vpn_limit * 100), 100]|min }}%"></div>
+        </div>
+        <div class="flex flex-wrap gap-1.5">
+          {% for vc in vpn_connections %}
+          <span class="inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-full
+            {% if vc.protocol == 'wireguard' %}bg-purple-100 text-purple-700{% else %}bg-blue-100 text-blue-700{% endif %}">
+            <i class="fa-solid {% if vc.protocol == 'wireguard' %}fa-shield-halved{% else %}fa-lock{% endif %} text-xs"></i>
+            {{ vc.label }}
+          </span>
+          {% endfor %}
+          {% for i in range(vpn_limit - vpn_connections|length) %}
+          <button onclick="openMintaVpnModal()"
+            class="inline-flex items-center gap-1 text-xs text-indigo-400 border border-dashed border-indigo-200 px-2 py-0.5 rounded-full hover:bg-indigo-50 transition">
+            <i class="fa-solid fa-plus text-xs"></i> Slot kosong
+          </button>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Daftar VPN Connections -->
+    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden mb-4">
+      <div class="px-4 py-3 border-b border-gray-50 flex items-center justify-between">
+        <p class="text-sm font-bold text-gray-700"><i class="fa-solid fa-network-wired text-indigo-500 mr-1.5"></i>Koneksi VPN Saya</p>
+        <button onclick="showTab('mikrotik')" class="text-xs text-indigo-600 font-semibold hover:underline">Lihat semua script</button>
+      </div>
+      <div class="divide-y divide-gray-50">
+        {% for vc in vpn_connections %}
+        <div class="px-4 py-3 flex items-center gap-3">
+          <div class="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0
+            {% if vc.protocol == 'wireguard' %}bg-purple-100{% else %}bg-blue-100{% endif %}">
+            <i class="fa-solid {% if vc.protocol == 'wireguard' %}fa-shield-halved text-purple-600{% else %}fa-lock text-blue-600{% endif %} text-sm"></i>
+          </div>
+          <div class="flex-1 min-w-0">
+            <p class="text-sm font-semibold text-gray-800">{{ vc.label }}</p>
+            <p class="text-xs text-gray-400">{{ vc.proto_label }}
+              {% if vc.protocol == 'wireguard' %}&bull; RouterOS 7.x{% else %}&bull; Semua RouterOS{% endif %}
+            </p>
+          </div>
+          <button onclick="openModalVpn({{ loop.index0 }})"
+            class="flex-shrink-0 text-xs bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1.5 rounded-lg font-medium transition">
+            <i class="fa-solid fa-terminal mr-1"></i>Script
+          </button>
+        </div>
+        {% endfor %}
+      </div>
+      {% if vpn_connections|length < vpn_limit %}
+      <!-- Ada slot tersedia — tombol minta tambah -->
+      <div class="px-4 pb-4 pt-1">
+        <button onclick="openMintaVpnModal()"
+          class="w-full flex items-center justify-center gap-2 border-2 border-dashed border-indigo-200 text-indigo-500 hover:border-indigo-400 hover:bg-indigo-50 rounded-xl py-3 text-sm font-semibold transition">
+          <i class="fa-solid fa-plus-circle"></i> Tambah VPN Baru ({{ vpn_connections|length }}/{{ vpn_limit }} slot)
+        </button>
+      </div>
+      {% else %}
+      <!-- Slot penuh — prompt upgrade -->
+      <div class="mx-4 mb-4 mt-1 p-3 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-800 flex items-start gap-2">
+        <i class="fa-solid fa-triangle-exclamation mt-0.5 flex-shrink-0 text-amber-500"></i>
+        <div>
+          <p class="font-bold">Slot VPN penuh ({{ vpn_connections|length }}/{{ vpn_limit }})</p>
+          <p class="mt-0.5">Punya lebih banyak server MikroTik? Upgrade paket untuk tambah slot VPN.</p>
+          <a href="https://wa.me/6281370024154?text=Halo+admin+VPNTunel,+saya+{{ p.nama }}+paket+{{ p.paket }}+ingin+upgrade+untuk+tambah+slot+VPN" target="_blank"
+            class="inline-flex items-center gap-1.5 mt-2 bg-amber-500 hover:bg-amber-600 text-white font-bold px-3 py-1.5 rounded-lg transition">
+            <i class="fa-solid fa-arrow-up"></i> Upgrade Paket via WA
+          </a>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- Paket Tersedia (tampil hanya jika slot penuh) -->
+    {% if vpn_connections|length >= vpn_limit %}
+    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 mb-4">
+      <p class="text-sm font-bold text-gray-700 mb-3"><i class="fa-solid fa-layer-group text-indigo-500 mr-1"></i>Paket Tersedia</p>
+      <div class="space-y-2">
+        {% for pk in PAKET_LIST %}
+        <div class="flex items-center justify-between p-3 rounded-xl border {% if pk.name == p.paket %}border-indigo-300 bg-indigo-50{% else %}border-gray-100{% endif %}">
+          <div>
+            <div class="flex items-center gap-2">
+              <p class="text-sm font-bold text-gray-800">{{ pk.name }}</p>
+              {% if pk.name == p.paket %}
+              <span class="text-xs bg-indigo-200 text-indigo-700 font-bold px-1.5 py-0.5 rounded-full">Paket kamu</span>
+              {% endif %}
+            </div>
+            <p class="text-xs text-gray-400 mt-0.5">
+              <i class="fa-solid fa-network-wired mr-1"></i>{{ pk.ports }} lokasi/server VPN
+            </p>
+          </div>
+          <div class="text-right">
+            <p class="text-sm font-bold text-indigo-600">{{ format_rupiah(pk.harga) }}</p>
+            <p class="text-xs text-gray-400">/bulan</p>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- Quick Actions -->
+    <div class="grid grid-cols-3 gap-3 mb-4">
+      <button onclick="showTab('mikrotik')"
+        class="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm flex flex-col items-center gap-2 hover:border-indigo-300 hover:bg-indigo-50 transition">
+        <div class="w-10 h-10 bg-indigo-100 rounded-xl flex items-center justify-center">
+          <i class="fa-solid fa-terminal text-indigo-600"></i>
+        </div>
+        <span class="text-xs font-semibold text-gray-700 text-center">Lihat Config</span>
+      </button>
+      <button onclick="showTab('bayar')"
+        class="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm flex flex-col items-center gap-2 hover:border-emerald-300 hover:bg-emerald-50 transition">
+        <div class="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center">
+          <i class="fa-solid fa-money-bill-wave text-emerald-600"></i>
+        </div>
+        <span class="text-xs font-semibold text-gray-700 text-center">Bayar</span>
+      </button>
+      <a href="https://wa.me/6281370024154?text=Halo+admin+VPNTunel,+saya+{{ p.nama }}+butuh+bantuan" target="_blank"
+        class="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm flex flex-col items-center gap-2 hover:border-green-300 hover:bg-green-50 transition">
+        <div class="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center">
+          <i class="fa-brands fa-whatsapp text-green-600 text-lg"></i>
+        </div>
+        <span class="text-xs font-semibold text-gray-700 text-center">Support</span>
+      </a>
+    </div>
+
+    <!-- Status tagihan bulan ini -->
+    <div class="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm">
+      <div class="flex items-center justify-between mb-3">
+        <p class="text-sm font-bold text-gray-700">Tagihan Bulan Ini</p>
+        <span class="text-xs text-gray-400">{{ bulan }}</span>
+      </div>
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-2xl font-bold text-gray-900">{{ format_rupiah(p.harga) }}</p>
+          <p class="text-xs text-gray-400 mt-0.5">Jatuh tempo: {{ expire_date }}</p>
+        </div>
+        {% if tagihan.lunas %}
+        <div class="text-center">
+          <div class="w-12 h-12 bg-emerald-100 rounded-full flex items-center justify-center mx-auto">
+            <i class="fa-solid fa-check text-emerald-600 text-lg"></i>
+          </div>
+          <p class="text-xs font-bold text-emerald-600 mt-1">Lunas</p>
+        </div>
+        {% else %}
+        <button onclick="showTab('bayar')"
+          class="bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold px-4 py-2.5 rounded-xl transition">
+          Bayar Sekarang
+        </button>
+        {% endif %}
+      </div>
+      {% if tagihan.lunas and tagihan.tanggal_lunas %}
+      <p class="text-xs text-emerald-600 mt-2"><i class="fa-solid fa-check-double mr-1"></i>Dibayar: {{ tagihan.tanggal_lunas }}</p>
+      {% endif %}
+    </div>
+
+  </div>
+
+  <!-- ═══════ TAB: TRANSAKSI ═══════ -->
+  <div id="page-transaksi" class="tab-page max-w-lg mx-auto px-3 py-4">
+    <h2 class="font-bold text-gray-800 mb-4">Riwayat Transaksi</h2>
+
+    <!-- Summary -->
+    <div class="grid grid-cols-2 gap-3 mb-4">
+      {% set lunas_count = riwayat | selectattr('lunas','equalto',1) | list | length %}
+      <div class="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm text-center">
+        <p class="text-2xl font-bold text-emerald-600">{{ lunas_count }}</p>
+        <p class="text-xs text-gray-400 mt-0.5">Bulan Lunas</p>
+      </div>
+      <div class="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm text-center">
+        <p class="text-2xl font-bold text-indigo-600">{{ riwayat | length }}</p>
+        <p class="text-xs text-gray-400 mt-0.5">Total Tagihan</p>
+      </div>
+    </div>
+
+    <!-- Riwayat List -->
+    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+      <div class="px-4 py-3 border-b border-gray-100">
+        <p class="text-sm font-bold text-gray-700">Semua Tagihan</p>
+      </div>
+      {% if riwayat %}
+      <div class="divide-y divide-gray-50">
+        {% for r in riwayat %}
+        <div class="px-4 py-3.5 flex items-center justify-between hover:bg-slate-50">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0
+              {% if r.lunas %}bg-emerald-100{% else %}bg-rose-100{% endif %}">
+              <i class="fa-solid {% if r.lunas %}fa-check text-emerald-600{% else %}fa-xmark text-rose-500{% endif %} text-sm"></i>
+            </div>
+            <div>
+              <p class="text-sm font-semibold text-gray-800">{{ r.bulan }}</p>
+              <p class="text-xs text-gray-400">
+                {% if r.lunas and r.tanggal_lunas %}Dibayar: {{ r.tanggal_lunas }}
+                {% elif r.lunas %}Sudah lunas
+                {% else %}Belum dibayar{% endif %}
+              </p>
+            </div>
+          </div>
+          <div class="text-right">
+            <p class="text-sm font-bold text-gray-800">{{ format_rupiah(p.harga) }}</p>
+            {% if r.lunas %}
+            <span class="text-xs font-bold text-emerald-600">Lunas</span>
+            {% else %}
+            <span class="text-xs font-bold text-rose-500">Belum</span>
+            {% endif %}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="px-4 py-10 text-center text-gray-400">
+        <i class="fa-solid fa-receipt text-3xl text-slate-200 mb-2 block"></i>
+        Belum ada riwayat transaksi
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- ═══════ TAB: BAYAR ═══════ -->
+  <div id="page-bayar" class="tab-page max-w-lg mx-auto px-3 py-4">
+    <h2 class="font-bold text-gray-800 mb-4">Pembayaran</h2>
+
+    <!-- Tagihan Bulan Ini -->
+    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 mb-4">
+      <div class="text-center py-2 mb-4">
+        <p class="text-gray-400 text-sm mb-1">Tagihan bulan <span class="font-semibold text-gray-700">{{ bulan }}</span></p>
+        <p class="text-4xl font-bold text-gray-900">{{ format_rupiah(p.harga) }}</p>
+        <p class="text-sm text-gray-400 mt-1">Jatuh tempo: <span class="font-semibold">{{ expire_date }}</span></p>
+      </div>
+
+      {% if tagihan.lunas %}
+      <div class="text-center py-5 bg-emerald-50 rounded-2xl">
+        <div class="w-14 h-14 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-2">
+          <i class="fa-solid fa-circle-check text-3xl text-emerald-500"></i>
+        </div>
+        <p class="font-bold text-emerald-700">Sudah Lunas</p>
+        {% if tagihan.tanggal_lunas %}
+        <p class="text-xs text-emerald-600 mt-1">Dibayar pada {{ tagihan.tanggal_lunas }}</p>
+        {% endif %}
+      </div>
+      {% else %}
+      <div class="bg-amber-50 border border-amber-200 rounded-xl p-3 mb-4 text-xs text-amber-700 flex items-start gap-2">
+        <i class="fa-solid fa-triangle-exclamation mt-0.5 flex-shrink-0"></i>
+        <span>Tagihan bulan ini belum dibayar. Segera lakukan pembayaran agar layanan tetap aktif.</span>
+      </div>
+      <button onclick="bayarTagihan()" id="btn-bayar-tagihan"
+        class="w-full flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 rounded-xl transition text-sm">
+        <i class="fa-solid fa-credit-card"></i> Bayar Sekarang — {{ format_rupiah(p.harga) }}
+      </button>
+      <p class="text-xs text-center text-gray-400 mt-2">Transfer Bank, QRIS, E-Wallet, dll.</p>
+      {% endif %}
+    </div>
+
+    <!-- Upgrade Paket -->
+    {% if vpn_connections|length >= vpn_limit %}
+    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 mb-4">
+      <p class="text-sm font-bold text-gray-700 mb-3">
+        <i class="fa-solid fa-arrow-up text-indigo-500 mr-1"></i>Upgrade Paket VPN
+      </p>
+      <div class="space-y-2">
+        {% for pk in PAKET_LIST %}
+        {% if pk.ports > vpn_connections|length %}
+        <div class="flex items-center justify-between p-3 rounded-xl border border-gray-100 hover:border-indigo-200 transition">
+          <div>
+            <p class="text-sm font-bold text-gray-800">{{ pk.name }}</p>
+            <p class="text-xs text-gray-400"><i class="fa-solid fa-network-wired mr-1"></i>{{ pk.ports }} slot VPN</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <p class="text-sm font-bold text-indigo-600">{{ format_rupiah(pk.harga) }}<span class="text-xs text-gray-400 font-normal">/bln</span></p>
+            <button onclick="upgradePayar('{{ pk.name }}')"
+              class="text-xs bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-3 py-1.5 rounded-lg transition">
+              Pilih
+            </button>
+          </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+  </div>
+
+  <!-- ═══════ TAB: MIKROTIK ═══════ -->
+  <div id="page-mikrotik" class="tab-page max-w-lg mx-auto px-3 py-4">
+    <h2 class="font-bold text-gray-800 mb-1">Konfigurasi MikroTik</h2>
+    <p class="text-xs text-gray-400 mb-4">{{ vpn_connections|length }} koneksi VPN aktif</p>
+
+    <!-- List semua VPN connections -->
+    <div class="space-y-3 mb-4">
+      {% for vc in vpn_connections %}
+      {% set port = p.ports[loop.index0] if p.ports and loop.index0 < p.ports|length else None %}
+      <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+
+        <!-- Header -->
+        <div class="px-4 py-3 flex items-center justify-between border-b border-gray-50">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0
+              {% if vc.protocol == 'wireguard' %}bg-purple-100{% else %}bg-blue-100{% endif %}">
+              {% if vc.protocol == 'wireguard' %}
+              <i class="fa-solid fa-shield-halved text-purple-600 text-sm"></i>
+              {% else %}
+              <i class="fa-solid fa-lock text-blue-600 text-sm"></i>
+              {% endif %}
+            </div>
+            <div>
+              <p class="text-sm font-bold text-gray-800">{{ vc.label }}</p>
+              <p class="text-xs text-gray-400">{{ vc.proto_label }}</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-1.5">
+            <button onclick="toggleSection('vpn-akses-{{ loop.index }}')"
+              class="flex items-center gap-1.5 text-xs bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-lg font-medium transition">
+              <i class="fa-solid fa-plug"></i> Akses
+            </button>
+            <button onclick="toggleSection('vpn-script-{{ loop.index }}')"
+              class="flex items-center gap-1.5 text-xs bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1.5 rounded-lg font-medium transition">
+              <i class="fa-solid fa-terminal"></i> Script
+            </button>
+          </div>
+        </div>
+
+        <!-- Info Akses (accordion) -->
+        <div id="vpn-akses-{{ loop.index }}" class="hidden border-b border-gray-50">
+          <div class="px-4 py-3">
+            <p class="text-xs font-bold text-gray-500 mb-2.5 uppercase tracking-wide">Info Akses — {{ vc.label }}</p>
+
+            {% if vc.protocol == 'wireguard' %}
+            <!-- WireGuard access info -->
+            <div class="space-y-1.5">
+              <div class="flex items-center justify-between bg-purple-50 rounded-xl px-3 py-2">
+                <div>
+                  <p class="text-xs text-purple-500 font-semibold">IP VPN MikroTik</p>
+                  <p class="text-sm font-mono font-bold text-gray-800">{{ vc.vpn_ip }}</p>
+                </div>
+                <button onclick="copyText('{{ vc.vpn_ip }}')" class="text-xs text-purple-600 hover:text-purple-800 bg-purple-100 px-2 py-1 rounded-lg transition">
+                  <i class="fa-solid fa-copy"></i>
+                </button>
+              </div>
+              {% set access_items = [
+                ('Winbox', vc.vpn_ip ~ ':8291', 'fa-desktop'),
+                ('API', vc.vpn_ip ~ ':8728', 'fa-code'),
+                ('API-SSL', vc.vpn_ip ~ ':8729', 'fa-lock'),
+                ('SSH', vc.vpn_ip ~ ':22', 'fa-terminal'),
+                ('Telnet', vc.vpn_ip ~ ':23', 'fa-network-wired'),
+              ] %}
+              {% for name, val, icon in access_items %}
+              <div class="flex items-center justify-between bg-slate-50 rounded-xl px-3 py-2">
+                <div class="flex items-center gap-2">
+                  <i class="fa-solid {{ icon }} text-slate-400 text-xs w-3"></i>
+                  <div>
+                    <p class="text-xs text-gray-400">{{ name }}</p>
+                    <p class="text-xs font-mono font-semibold text-gray-700">{{ val }}</p>
+                  </div>
+                </div>
+                <button onclick="copyText('{{ val }}')" class="text-xs text-gray-400 hover:text-gray-600 bg-white border border-gray-200 px-2 py-1 rounded-lg transition">
+                  <i class="fa-solid fa-copy"></i>
+                </button>
+              </div>
+              {% endfor %}
+              {% if port %}
+              <div class="mt-1 pt-2 border-t border-gray-100">
+                <p class="text-xs text-gray-400 mb-1.5 font-semibold">Akses Remote (tanpa VPN)</p>
+                <div class="flex items-center justify-between bg-amber-50 rounded-xl px-3 py-2">
+                  <div>
+                    <p class="text-xs text-amber-600 font-semibold">Winbox Remote</p>
+                    <p class="text-xs font-mono font-bold text-gray-800">{{ FRP_SERVER }}:{{ port }}</p>
+                  </div>
+                  <button onclick="copyText('{{ FRP_SERVER }}:{{ port }}')" class="text-xs text-amber-600 bg-amber-100 px-2 py-1 rounded-lg transition">
+                    <i class="fa-solid fa-copy"></i>
+                  </button>
+                </div>
+              </div>
+              {% endif %}
+              {% if vc.billing_subdomain %}
+              <div class="mt-1 pt-2 border-t border-gray-100">
+                <p class="text-xs text-gray-400 mb-1.5 font-semibold"><i class="fa-solid fa-receipt mr-1 text-indigo-400"></i>Billing System</p>
+                <div class="flex items-center justify-between bg-indigo-50 rounded-xl px-3 py-2">
+                  <div>
+                    <p class="text-xs text-indigo-600 font-semibold">URL Billing</p>
+                    <p class="text-xs font-mono font-bold text-gray-800">{{ vc.billing_subdomain }}.vpntunel.my.id</p>
+                  </div>
+                  <button onclick="copyText('http://{{ vc.billing_subdomain }}.vpntunel.my.id')" class="text-xs text-indigo-600 bg-indigo-100 px-2 py-1 rounded-lg transition">
+                    <i class="fa-solid fa-copy"></i>
+                  </button>
+                </div>
+                <button onclick="toggleSection('frp-script-{{ loop.index }}')"
+                  class="mt-2 w-full text-xs border border-indigo-200 text-indigo-600 hover:bg-indigo-50 py-1.5 rounded-xl transition font-semibold">
+                  <i class="fa-solid fa-terminal mr-1"></i> Lihat Script FRP Client
+                </button>
+                <div id="frp-script-{{ loop.index }}" class="hidden mt-2">
+                  <p class="text-xs text-gray-500 mb-1">Paste di terminal MikroTik setelah VPN terkoneksi:</p>
+                  <pre class="bg-slate-900 text-green-400 text-xs p-3 rounded-xl overflow-x-auto leading-relaxed whitespace-pre-wrap" id="frp-pre-{{ loop.index }}">/system scheduler add name=frp-billing interval=1m on-event=":local r [/tool fetch url=\"http://{{ FRP_SERVER }}:7000\" keep-result=no as-value]; :if ([:typeof \$r] != \"nothing\") do={ /tool fetch url=\"http://{{ vc.billing_subdomain }}.vpntunel.my.id\" keep-result=no }"</pre>
+                  <p class="text-xs text-indigo-500 mt-2 bg-indigo-50 rounded-xl p-2">
+                    <i class="fa-solid fa-circle-info mr-1"></i>
+                    Atau install <strong>frpc</strong> binary di MikroTik dan arahkan port <strong>{{ vc.billing_port }}</strong> ke subdomain <strong>{{ vc.billing_subdomain }}</strong>.
+                  </p>
+                </div>
+              </div>
+              {% endif %}
+            </div>
+
+            {% else %}
+            <!-- L2TP access info -->
+            <div class="space-y-1.5">
+              {% set l2tp_items = [
+                ('VPN Server', VPN_DOMAIN, 'fa-server'),
+                ('Username', vc.l2tp_user, 'fa-user'),
+                ('Password', vc.l2tp_password, 'fa-key'),
+              ] %}
+              {% for name, val, icon in l2tp_items %}
+              <div class="flex items-center justify-between bg-blue-50 rounded-xl px-3 py-2">
+                <div class="flex items-center gap-2">
+                  <i class="fa-solid {{ icon }} text-blue-400 text-xs w-3"></i>
+                  <div>
+                    <p class="text-xs text-blue-500 font-semibold">{{ name }}</p>
+                    <p class="text-xs font-mono font-bold text-gray-800">{{ val }}</p>
+                  </div>
+                </div>
+                <button onclick="copyText('{{ val }}')" class="text-xs text-blue-600 bg-blue-100 px-2 py-1 rounded-lg transition">
+                  <i class="fa-solid fa-copy"></i>
+                </button>
+              </div>
+              {% endfor %}
+              <div class="bg-slate-50 rounded-xl px-3 py-2 text-xs text-gray-500">
+                <i class="fa-solid fa-circle-info mr-1 text-blue-400"></i>
+                Setelah connect, akses MikroTik via IP yang didapat dari L2TP pool (10.10.10.x)
+              </div>
+              {% if port %}
+              <div class="flex items-center justify-between bg-amber-50 rounded-xl px-3 py-2">
+                <div>
+                  <p class="text-xs text-amber-600 font-semibold">Winbox Remote</p>
+                  <p class="text-xs font-mono font-bold text-gray-800">{{ FRP_SERVER }}:{{ port }}</p>
+                </div>
+                <button onclick="copyText('{{ FRP_SERVER }}:{{ port }}')" class="text-xs text-amber-600 bg-amber-100 px-2 py-1 rounded-lg transition">
+                  <i class="fa-solid fa-copy"></i>
+                </button>
+              </div>
+              {% endif %}
+              {% if vc.billing_subdomain %}
+              <div class="pt-2 border-t border-gray-100">
+                <p class="text-xs text-gray-400 mb-1.5 font-semibold"><i class="fa-solid fa-receipt mr-1 text-indigo-400"></i>Billing System</p>
+                <div class="flex items-center justify-between bg-indigo-50 rounded-xl px-3 py-2">
+                  <div>
+                    <p class="text-xs text-indigo-600 font-semibold">URL Billing</p>
+                    <p class="text-xs font-mono font-bold text-gray-800">{{ vc.billing_subdomain }}.vpntunel.my.id</p>
+                  </div>
+                  <button onclick="copyText('http://{{ vc.billing_subdomain }}.vpntunel.my.id')" class="text-xs text-indigo-600 bg-indigo-100 px-2 py-1 rounded-lg transition">
+                    <i class="fa-solid fa-copy"></i>
+                  </button>
+                </div>
+              </div>
+              {% endif %}
+            </div>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- Script (accordion) -->
+        <div id="vpn-script-{{ loop.index }}" class="hidden px-4 py-3">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs text-gray-500">Paste di terminal MikroTik (Winbox → New Terminal)</span>
+            <button onclick="copyVpnScript('vpn-pre-{{ loop.index }}', this)"
+              class="text-xs bg-slate-100 hover:bg-slate-200 text-gray-600 px-2.5 py-1 rounded-lg transition flex items-center gap-1">
+              <i class="fa-solid fa-copy"></i> Copy
+            </button>
+          </div>
+          <pre id="vpn-pre-{{ loop.index }}" class="bg-slate-900 text-green-400 text-xs p-3 rounded-xl overflow-x-auto leading-relaxed whitespace-pre-wrap">{{ vc.script }}</pre>
+          <div class="mt-3 bg-indigo-50 rounded-xl p-3 text-xs text-indigo-700">
+            {% if vc.protocol == 'wireguard' %}
+            <p>1. Paste script → 2. Cek: <code class="bg-white px-1 rounded">/interface wireguard peers print</code></p>
+            <p class="mt-1 text-indigo-500">Perlu RouterOS 7.x (System → Routerboard)</p>
+            {% else %}
+            <p>1. Paste script → 2. Cek: <code class="bg-white px-1 rounded">/interface l2tp-client print</code> → connected</p>
+            <p class="mt-1 text-indigo-500">Kompatibel semua versi RouterOS</p>
+            {% endif %}
+          </div>
+        </div>
+
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- Butuh bantuan -->
+    <a href="https://wa.me/6281370024154?text=Halo+admin,+saya+{{ p.nama }}+butuh+bantuan+pasang+config+VPN+MikroTik" target="_blank"
+      class="flex items-center justify-center gap-2 bg-white border border-gray-200 hover:border-green-300 hover:bg-green-50 text-gray-700 hover:text-green-700 font-semibold py-3 rounded-2xl transition text-sm">
+      <i class="fa-brands fa-whatsapp text-green-500 text-lg"></i> Butuh Bantuan? Chat Admin
+    </a>
+  </div>
+
+  <!-- ═══════ TAB: SETTING ═══════ -->
+  <div id="page-setting" class="tab-page max-w-lg mx-auto px-3 py-4">
+    <h2 class="font-bold text-gray-800 mb-4">Pengaturan Akun</h2>
+
+    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden mb-4">
+      <div class="divide-y divide-gray-50">
+        <div class="px-4 py-3.5 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 bg-indigo-100 rounded-lg flex items-center justify-center">
+              <i class="fa-solid fa-user text-indigo-600 text-xs"></i>
+            </div>
+            <span class="text-sm text-gray-500">Nama</span>
+          </div>
+          <span class="text-sm font-semibold text-gray-800">{{ p.nama }}</span>
+        </div>
+        <div class="px-4 py-3.5 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
+              <i class="fa-brands fa-whatsapp text-green-600 text-xs"></i>
+            </div>
+            <span class="text-sm text-gray-500">WhatsApp</span>
+          </div>
+          <span class="text-sm font-semibold text-gray-800">{{ p.nomor_wa }}</span>
+        </div>
+        <div class="px-4 py-3.5 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 bg-amber-100 rounded-lg flex items-center justify-center">
+              <i class="fa-solid fa-key text-amber-600 text-xs"></i>
+            </div>
+            <span class="text-sm text-gray-500">PIN Login</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span id="pin-display" class="text-sm font-bold font-mono text-gray-800 bg-slate-100 px-2.5 py-1 rounded-lg tracking-widest">••••••</span>
+            <button onclick="togglePin()" class="text-gray-400 hover:text-gray-600 transition">
+              <i class="fa-solid fa-eye text-xs" id="pin-eye"></i>
+            </button>
+          </div>
+        </div>
+        <div class="px-4 py-3.5 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
+              <i class="fa-solid fa-tag text-purple-600 text-xs"></i>
+            </div>
+            <span class="text-sm text-gray-500">Paket</span>
+          </div>
+          <span class="text-sm font-semibold text-indigo-600">{{ p.paket }}</span>
+        </div>
+        <div class="px-4 py-3.5 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 bg-slate-100 rounded-lg flex items-center justify-center">
+              <i class="fa-solid fa-fingerprint text-slate-600 text-xs"></i>
+            </div>
+            <span class="text-sm text-gray-500">ID Akun</span>
+          </div>
+          <span class="text-xs font-mono text-gray-400">{{ p.id }}</span>
+        </div>
+        <div class="px-4 py-3.5 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 bg-slate-100 rounded-lg flex items-center justify-center">
+              <i class="fa-solid fa-calendar text-slate-600 text-xs"></i>
+            </div>
+            <span class="text-sm text-gray-500">Bergabung</span>
+          </div>
+          <span class="text-xs text-gray-600">{{ p.tanggal_mulai }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="space-y-3">
+      <a href="https://wa.me/6281370024154?text=Halo+admin+VPNTunel,+saya+{{ p.nama }}+ingin+upgrade+paket" target="_blank"
+        class="flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-2xl transition text-sm">
+        <i class="fa-solid fa-arrow-up"></i> Upgrade Paket
+      </a>
+      <a href="https://wa.me/6281370024154?text=Halo+admin+VPNTunel,+saya+{{ p.nama }}+butuh+bantuan" target="_blank"
+        class="flex items-center justify-center gap-2 bg-white border border-gray-200 hover:border-green-300 text-gray-700 hover:text-green-700 font-semibold py-3 rounded-2xl transition text-sm">
+        <i class="fa-brands fa-whatsapp text-green-500 text-lg"></i> Hubungi Support
+      </a>
+      <a href="/logout"
+        class="flex items-center justify-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold py-3 rounded-2xl transition text-sm">
+        <i class="fa-solid fa-right-from-bracket"></i> Keluar
+      </a>
+    </div>
+  </div>
+
+  <!-- ═══════ MODAL: MINTA TAMBAH VPN ═══════ -->
+  <div id="modal-minta-vpn" class="modal fixed inset-0 z-50 items-end justify-center bg-black/60" onclick="closeMintaVpnModal()">
+    <div class="bg-white w-full max-w-lg rounded-t-3xl" onclick="event.stopPropagation()">
+      <div class="flex justify-center pt-3 pb-1">
+        <div class="w-10 h-1 bg-gray-300 rounded-full"></div>
+      </div>
+      <div class="px-5 py-3 border-b border-gray-100 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <i class="fa-solid fa-plus-circle text-indigo-500"></i>
+          <span class="font-bold text-gray-800 text-sm">Tambah VPN Baru</span>
+        </div>
+        <button onclick="closeMintaVpnModal()" class="text-gray-400 hover:text-gray-600">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+      <div class="px-5 py-4 space-y-4 pb-8">
+        <div class="p-3 bg-indigo-50 rounded-xl text-xs text-indigo-700 flex items-center gap-2">
+          <i class="fa-solid fa-circle-info"></i>
+          <span>Paket <strong>{{ p.paket }}</strong> — sisa slot: <strong>{{ vpn_limit - vpn_connections|length }}</strong>. VPN langsung dibuat dan script dikirim ke WA Anda.</span>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-gray-600 mb-2">Nama Server / Label</label>
+          <input type="text" id="minta-vpn-label" placeholder="cth: Kantor, Rumah, Cabang 2"
+            class="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-gray-600 mb-2">Protokol yang diinginkan</label>
+          <div class="grid grid-cols-2 gap-3">
+            <label class="minta-proto-opt border-2 border-indigo-400 bg-indigo-50 rounded-xl p-3 cursor-pointer transition">
+              <input type="radio" name="minta-vpn-proto" value="wireguard" checked class="hidden">
+              <div class="text-center">
+                <i class="fa-solid fa-shield-halved text-purple-600 text-xl mb-1 block"></i>
+                <p class="text-xs font-bold text-gray-800">WireGuard</p>
+                <p class="text-xs text-gray-400">RouterOS 7.x</p>
+              </div>
+            </label>
+            <label class="minta-proto-opt border-2 border-gray-200 rounded-xl p-3 cursor-pointer transition">
+              <input type="radio" name="minta-vpn-proto" value="l2tp" class="hidden">
+              <div class="text-center">
+                <i class="fa-solid fa-lock text-blue-600 text-xl mb-1 block"></i>
+                <p class="text-xs font-bold text-gray-800">L2TP/IPSec</p>
+                <p class="text-xs text-gray-400">Semua RouterOS</p>
+              </div>
+            </label>
+          </div>
+        </div>
+        <button onclick="submitMintaVpn()" id="btn-minta-vpn"
+          class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-xl transition text-sm flex items-center justify-center gap-2">
+          <i class="fa-solid fa-bolt"></i> Buat VPN Sekarang
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════ MODAL: LIHAT CONFIG VPN ═══════ -->
+  <div id="modal-lihat" class="modal fixed inset-0 z-50 items-end justify-center bg-black/60" onclick="closeModal()">
+    <div class="bg-white w-full max-w-lg rounded-t-3xl max-h-[88vh] overflow-y-auto" onclick="event.stopPropagation()">
+      <div class="flex justify-center pt-3 pb-1">
+        <div class="w-10 h-1 bg-gray-300 rounded-full"></div>
+      </div>
+      <div class="px-5 py-3 border-b border-gray-100 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <i class="fa-solid fa-terminal text-slate-500"></i>
+          <span id="modal-vpn-title" class="font-bold text-gray-800 text-sm">Script MikroTik</span>
+          <span id="modal-vpn-badge" class="bg-indigo-100 text-indigo-700 text-xs font-bold px-2 py-0.5 rounded-full"></span>
+        </div>
+        <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+      <div class="px-5 py-4 space-y-4 pb-8">
+        <div>
+          <div class="bg-slate-900 text-green-400 text-xs p-3 rounded-xl leading-relaxed mb-2">
+            <pre id="modal-script" class="whitespace-pre-wrap"></pre>
+          </div>
+          <button onclick="salinTeks('modal-script', this)"
+            class="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold px-4 py-2.5 rounded-xl transition">
+            <i class="fa-solid fa-copy"></i> Salin Script
+          </button>
+        </div>
+        <div class="bg-blue-50 border border-blue-100 rounded-xl p-4 text-xs text-blue-700">
+          <p class="font-bold mb-1"><i class="fa-solid fa-circle-info mr-1"></i>Cara Pasang:</p>
+          <p>Buka Winbox → New Terminal → paste script → Enter</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Navigation -->
+  <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-30 shadow-lg safe-area-inset">
+    <div class="max-w-lg mx-auto grid grid-cols-5 h-16">
+      <button onclick="showTab('home')" id="nav-home" class="nav-btn active flex flex-col items-center justify-center gap-0.5 px-1">
+        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+        <span class="text-xs font-medium">Home</span>
+      </button>
+      <button onclick="showTab('transaksi')" id="nav-transaksi" class="nav-btn flex flex-col items-center justify-center gap-0.5 px-1">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+        <span class="text-xs font-medium">Transaksi</span>
+      </button>
+      <button onclick="showTab('bayar')" id="nav-bayar" class="nav-btn flex flex-col items-center justify-center gap-0.5 px-1">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
+        <span class="text-xs font-medium">Bayar</span>
+      </button>
+      <button onclick="showTab('mikrotik')" id="nav-mikrotik" class="nav-btn flex flex-col items-center justify-center gap-0.5 px-1">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2"/></svg>
+        <span class="text-xs font-medium">MikroTik</span>
+      </button>
+      <button onclick="showTab('setting')" id="nav-setting" class="nav-btn flex flex-col items-center justify-center gap-0.5 px-1">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+        <span class="text-xs font-medium">Setting</span>
+      </button>
+    </div>
+  </div>
+
+<script>
+const PAGES = ['home','transaksi','bayar','mikrotik','setting'];
+
+function showTab(name) {
+  PAGES.forEach(p => {
+    document.getElementById('page-' + p).classList.remove('active');
+    const nav = document.getElementById('nav-' + p);
+    nav.classList.remove('active');
+  });
+  document.getElementById('page-' + name).classList.add('active');
+  document.getElementById('nav-' + name).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+// VPN connection scripts dari server
+const vpnConnections = [
+  {% for vc in vpn_connections %}
+  { label: {{ vc.label | tojson }}, protoLabel: {{ vc.proto_label | tojson }}, script: {{ vc.script | tojson }} }{% if not loop.last %},{% endif %}
+  {% endfor %}
+];
+
+function openModalVpn(idx) {
+  const vc = vpnConnections[idx];
+  document.getElementById('modal-vpn-title').textContent = vc.label;
+  document.getElementById('modal-vpn-badge').textContent = vc.protoLabel;
+  document.getElementById('modal-script').textContent = vc.script;
+  document.getElementById('modal-lihat').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('modal-lihat').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function toggleSection(id) {
+  const el = document.getElementById(id);
+  const isHidden = el.classList.contains('hidden');
+  // Close all accordions in same card
+  const prefix = id.replace(/-\d+$/, '-');
+  const idx = id.match(/-(\d+)$/)[1];
+  document.querySelectorAll(`[id^="vpn-akses-"], [id^="vpn-script-"]`).forEach(s => {
+    if (s.id.endsWith('-' + idx)) s.classList.add('hidden');
+  });
+  if (isHidden) el.classList.remove('hidden');
+}
+
+function toggleVpnScript(id) {
+  toggleSection(id);
+}
+
+function copyText(text) {
+  navigator.clipboard.writeText(text).then(() => {
+    const toast = document.createElement('div');
+    toast.className = 'fixed bottom-24 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-xs px-4 py-2 rounded-full z-50 shadow-lg';
+    toast.textContent = '✅ Disalin!';
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 1800);
+  });
+}
+
+function copyVpnScript(preId, btn) {
+  const text = document.getElementById(preId).textContent.trim();
+  navigator.clipboard.writeText(text).then(() => {
+    const orig = btn.innerHTML;
+    btn.innerHTML = '<i class="fa-solid fa-check"></i> Disalin!';
+    btn.classList.add('bg-green-100','text-green-700');
+    setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('bg-green-100','text-green-700'); }, 2000);
+  });
+}
+
+function salinTeks(id, btn) {
+  const text = document.getElementById(id).textContent.trim();
+  navigator.clipboard.writeText(text).then(() => {
+    const orig = btn.innerHTML;
+    btn.innerHTML = '<i class="fa-solid fa-check"></i> Disalin!';
+    btn.classList.replace('bg-indigo-600','bg-emerald-500');
+    setTimeout(() => { btn.innerHTML = orig; btn.classList.replace('bg-emerald-500','bg-indigo-600'); }, 2000);
+  });
+}
+
+// PIN show/hide di setting
+const realPin = {{ p.pin | tojson }};
+let pinVisible = false;
+function togglePin() {
+  pinVisible = !pinVisible;
+  document.getElementById('pin-display').textContent = pinVisible ? realPin : '••••••';
+  document.getElementById('pin-eye').className = pinVisible ? 'fa-solid fa-eye-slash text-xs' : 'fa-solid fa-eye text-xs';
+}
+
+// ── Midtrans Payment ───────────────────────────────────────────────────────
+async function bayarTagihan() {
+  const btn = document.getElementById('btn-bayar-tagihan');
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Memproses...';
+  btn.disabled = true;
+  try {
+    const r = await fetch('/bayar/tagihan', { method: 'POST' });
+    const j = await r.json();
+    if (!j.ok) {
+      alert('❌ ' + j.msg);
+      btn.innerHTML = '<i class="fa-solid fa-credit-card"></i> Bayar Sekarang';
+      btn.disabled = false;
+      return;
+    }
+    window.snap.pay(j.snap_token, {
+      onSuccess: () => { location.reload(); },
+      onPending: () => { location.reload(); },
+      onError: () => {
+        btn.innerHTML = '<i class="fa-solid fa-credit-card"></i> Bayar Sekarang';
+        btn.disabled = false;
+      },
+      onClose: () => {
+        btn.innerHTML = '<i class="fa-solid fa-credit-card"></i> Bayar Sekarang';
+        btn.disabled = false;
+      },
+    });
+  } catch(e) {
+    alert('❌ Gagal membuat transaksi.');
+    btn.innerHTML = '<i class="fa-solid fa-credit-card"></i> Bayar Sekarang';
+    btn.disabled = false;
+  }
+}
+
+async function upgradePayar(targetPaket) {
+  const fd = new FormData();
+  fd.append('target_paket', targetPaket);
+  try {
+    const r = await fetch('/bayar/upgrade-paket', { method: 'POST', body: fd });
+    const j = await r.json();
+    if (!j.ok) { alert('❌ ' + j.msg); return; }
+    window.snap.pay(j.snap_token, {
+      onSuccess: () => { alert('✅ Upgrade berhasil! Halaman akan dimuat ulang.'); location.reload(); },
+      onPending: () => { location.reload(); },
+      onError: () => { alert('❌ Pembayaran gagal.'); },
+      onClose: () => {},
+    });
+  } catch(e) {
+    alert('❌ Gagal membuat transaksi.');
+  }
+}
+
+// ── Modal Minta Tambah VPN ──────────────────────────────────────────────────
+function openMintaVpnModal() {
+  document.getElementById('modal-minta-vpn').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeMintaVpnModal() {
+  document.getElementById('modal-minta-vpn').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// Proto card styling
+document.querySelectorAll('.minta-proto-opt input').forEach(inp => {
+  inp.addEventListener('change', () => {
+    document.querySelectorAll('.minta-proto-opt').forEach(el => {
+      const i = el.querySelector('input');
+      el.classList.toggle('border-indigo-400', i.value === 'wireguard' && i.checked);
+      el.classList.toggle('bg-indigo-50', i.value === 'wireguard' && i.checked);
+      el.classList.toggle('border-blue-400', i.value === 'l2tp' && i.checked);
+      el.classList.toggle('bg-blue-50', i.value === 'l2tp' && i.checked);
+      el.classList.toggle('border-gray-200', !i.checked);
+    });
+  });
+});
+
+async function submitMintaVpn() {
+  const label = document.getElementById('minta-vpn-label').value.trim();
+  const protocol = document.querySelector('input[name="minta-vpn-proto"]:checked').value;
+  const btn = document.getElementById('btn-minta-vpn');
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Mengirim...';
+  btn.disabled = true;
+  const fd = new FormData();
+  fd.append('label', label);
+  fd.append('protocol', protocol);
+  try {
+    const r = await fetch('/tambah-vpn-mandiri', { method: 'POST', body: fd });
+    const j = await r.json();
+    closeMintaVpnModal();
+    if (j.ok) {
+      alert('✅ ' + j.msg);
+      if (j.reload) location.reload();
+    } else {
+      alert('❌ ' + j.msg);
+    }
+  } catch(e) {
+    alert('❌ Gagal mengirim permintaan. Coba lagi.');
+  }
+  btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Kirim Permintaan ke Admin';
+  btn.disabled = false;
+}
+</script>
+</body>
+</html>

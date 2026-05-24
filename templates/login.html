@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login — VPNTunel.my.id</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    .gradient-bg { background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #312e81 100%); }
+  </style>
+</head>
+<body class="gradient-bg min-h-screen flex items-center justify-center p-4">
+  <div class="w-full max-w-sm">
+
+    <!-- Logo -->
+    <div class="text-center mb-7">
+      <a href="/" class="inline-block">
+        <div class="flex items-center justify-center gap-2 mb-2">
+          <div class="w-12 h-12 bg-indigo-500/30 border border-indigo-400/40 rounded-2xl flex items-center justify-center">
+            <i class="fa-solid fa-bolt text-indigo-300 text-xl"></i>
+          </div>
+        </div>
+        <div class="text-2xl font-bold text-white">VPNTunel<span class="text-indigo-300 font-normal">.my.id</span></div>
+        <p class="text-indigo-400 text-sm mt-0.5">Portal Pelanggan</p>
+      </a>
+    </div>
+
+    <!-- Card -->
+    <div class="bg-white rounded-2xl shadow-2xl overflow-hidden">
+
+      <!-- Card Header -->
+      <div class="bg-gradient-to-r from-indigo-600 to-indigo-700 px-7 py-5">
+        <h2 class="text-white font-bold text-lg">Masuk ke Akun Anda</h2>
+        <p class="text-indigo-200 text-xs mt-0.5">Gunakan nomor WA dan PIN yang dikirim saat pendaftaran</p>
+      </div>
+
+      <!-- Form -->
+      <div class="px-7 py-6">
+
+        {% if error %}
+        <div class="mb-5 p-3 bg-red-50 border border-red-200 text-red-700 rounded-xl text-sm flex items-center gap-2">
+          <i class="fa-solid fa-circle-exclamation flex-shrink-0"></i>
+          <span>{{ error }}</span>
+        </div>
+        {% endif %}
+
+        <form method="post" action="/login" class="space-y-4" onsubmit="handleLogin(event)">
+
+          <!-- Nomor WA -->
+          <div>
+            <label class="block text-xs font-semibold text-gray-600 mb-1.5">Nomor WhatsApp</label>
+            <div class="relative">
+              <i class="fa-brands fa-whatsapp text-gray-400 absolute left-3 top-1/2 -translate-y-1/2 text-base"></i>
+              <input type="text" name="nomor_wa" id="nomor_wa" required autofocus
+                class="w-full border border-gray-200 rounded-xl pl-10 pr-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent text-sm"
+                placeholder="08xxxxxxxxxx">
+            </div>
+          </div>
+
+          <!-- PIN -->
+          <div>
+            <label class="block text-xs font-semibold text-gray-600 mb-1.5">PIN (6 digit)</label>
+            <div class="relative">
+              <i class="fa-solid fa-lock text-gray-400 absolute left-3 top-1/2 -translate-y-1/2"></i>
+              <input type="password" name="pin" id="pin-input" required maxlength="6" inputmode="numeric"
+                class="w-full border border-gray-200 rounded-xl pl-10 pr-12 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent text-sm tracking-[0.4em] font-bold"
+                placeholder="• • • • • •">
+              <button type="button" onclick="togglePin()" id="pin-eye"
+                class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition">
+                <i class="fa-solid fa-eye" id="pin-eye-icon"></i>
+              </button>
+            </div>
+            <p class="text-xs text-gray-400 mt-1">PIN 6 digit dikirim ke WA Anda saat akun dibuat</p>
+          </div>
+
+          <!-- Submit -->
+          <button type="submit" id="btn-login"
+            class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-xl transition text-sm flex items-center justify-center gap-2 mt-2">
+            <i class="fa-solid fa-right-to-bracket"></i> Masuk
+          </button>
+        </form>
+
+        <!-- Divider -->
+        <div class="flex items-center gap-3 my-5">
+          <div class="flex-1 h-px bg-gray-100"></div>
+          <span class="text-xs text-gray-300">atau</span>
+          <div class="flex-1 h-px bg-gray-100"></div>
+        </div>
+
+        <!-- Belum punya akun -->
+        <a href="/daftar"
+          class="flex items-center justify-center gap-2 border border-gray-200 hover:border-indigo-300 hover:bg-indigo-50 text-gray-600 hover:text-indigo-700 font-semibold py-2.5 rounded-xl transition text-sm">
+          <i class="fa-solid fa-user-plus"></i> Daftar Akun Baru
+        </a>
+      </div>
+    </div>
+
+    <!-- Info Box -->
+    <div class="mt-4 bg-white/5 border border-white/10 rounded-2xl p-4">
+      <p class="text-indigo-300 text-xs font-semibold mb-2 flex items-center gap-1.5">
+        <i class="fa-solid fa-circle-info"></i> Apa yang ada di dalam portal?
+      </p>
+      <div class="grid grid-cols-3 gap-2 text-center">
+        <div class="bg-white/5 rounded-xl p-2">
+          <i class="fa-solid fa-terminal text-indigo-300 text-lg mb-1 block"></i>
+          <p class="text-white text-xs font-medium">Script Config</p>
+          <p class="text-indigo-400 text-xs">Siap paste</p>
+        </div>
+        <div class="bg-white/5 rounded-xl p-2">
+          <i class="fa-solid fa-file-invoice-dollar text-indigo-300 text-lg mb-1 block"></i>
+          <p class="text-white text-xs font-medium">Tagihan</p>
+          <p class="text-indigo-400 text-xs">Status bayar</p>
+        </div>
+        <div class="bg-white/5 rounded-xl p-2">
+          <i class="fa-solid fa-headset text-indigo-300 text-lg mb-1 block"></i>
+          <p class="text-white text-xs font-medium">Support</p>
+          <p class="text-indigo-400 text-xs">Chat admin</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="mt-4 text-center space-y-2">
+      <p class="text-xs text-indigo-400">
+        Lupa PIN?
+        <a href="https://wa.me/6281370024154?text=Halo+admin,+saya+lupa+PIN+portal+vpntunel.my.id" target="_blank"
+          class="text-white hover:underline font-medium">Hubungi Admin WA</a>
+      </p>
+      <p class="text-xs">
+        <a href="/" class="text-indigo-400 hover:text-white transition">
+          <i class="fa-solid fa-arrow-left mr-1 text-xs"></i> Kembali ke Beranda
+        </a>
+      </p>
+    </div>
+
+  </div>
+
+<script>
+function togglePin() {
+  const input = document.getElementById('pin-input');
+  const icon  = document.getElementById('pin-eye-icon');
+  if (input.type === 'password') {
+    input.type = 'text';
+    icon.className = 'fa-solid fa-eye-slash';
+  } else {
+    input.type = 'password';
+    icon.className = 'fa-solid fa-eye';
+  }
+}
+
+function handleLogin(e) {
+  const btn = document.getElementById('btn-login');
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Memverifikasi...';
+  btn.disabled = true;
+}
+</script>
+</body>
+</html>
