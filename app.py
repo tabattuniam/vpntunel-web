@@ -3,6 +3,7 @@ from __future__ import annotations
 import sys
 import logging
 import calendar
+import sqlite3
 from datetime import date, timedelta
 from pathlib import Path
 
@@ -37,6 +38,21 @@ def _build_vpn_connections(p: dict, vpn_connections: list[dict]) -> list[dict]:
 logging.basicConfig(level=logging.INFO)
 
 cfg = yaml.safe_load(Path("/home/ubuntu/projects/vpntunel-panel/configs/panel.yaml").read_text())
+BILLING_DB = "/home/ubuntu/projects/billing-web/data/billing.db"
+
+
+def _save_registrasi(nama_isp, nama_pemilik, nomor_wa, kota, paket, estimasi, catatan):
+    import time as _time
+    try:
+        con = sqlite3.connect(BILLING_DB)
+        con.execute(
+            "INSERT INTO tenant_registrasi (nama_isp,nama_pemilik,nomor_wa,kota,paket,estimasi_pelanggan,catatan,created_at) VALUES (?,?,?,?,?,?,?,?)",
+            (nama_isp, nama_pemilik, nomor_wa, kota, paket, estimasi, catatan, int(_time.time()))
+        )
+        con.commit()
+        con.close()
+    except Exception as e:
+        logging.error("Gagal simpan registrasi ke billing DB: %s", e)
 
 storage    = Storage(cfg["db_path"])
 wa         = WuzAPIClient(cfg["wuzapi"]["url"], cfg["wuzapi"]["token"])
@@ -124,6 +140,7 @@ async def daftar_submit(
     estimasi_pelanggan: str = Form(""),
     catatan: str = Form(""),
 ):
+    _save_registrasi(nama_isp, nama_pemilik, nomor_wa, kota, paket, estimasi_pelanggan, catatan)
     wa.send(ADMIN_WA,
         f"🔔 *Pendaftaran ISP Baru — VPNTunel Billing*\n\n"
         f"🏢 ISP: *{nama_isp}*\n"
@@ -133,7 +150,7 @@ async def daftar_submit(
         f"📦 Paket: {paket}\n"
         f"👥 Est. Pelanggan: {estimasi_pelanggan or '-'}\n"
         f"📝 Catatan: {catatan or '-'}\n\n"
-        f"Silakan proses aktivasi di billing.vpntunel.my.id"
+        f"Lihat & proses di: https://billing.vpntunel.my.id/registrasi"
     )
     return templates.TemplateResponse(request=request, name="daftar.html", context={
         "success": True, "nama_isp": nama_isp, "nama_pemilik": nama_pemilik,
