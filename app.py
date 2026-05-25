@@ -116,20 +116,27 @@ async def daftar_form(request: Request):
 @app.post("/daftar", response_class=HTMLResponse)
 async def daftar_submit(
     request: Request,
-    nama: str = Form(...),
+    nama_isp: str = Form(...),
+    nama_pemilik: str = Form(...),
     nomor_wa: str = Form(...),
-    protokol: str = Form(""),
-    paket: str = Form(...),
+    kota: str = Form(...),
+    paket: str = Form("Pro"),
+    estimasi_pelanggan: str = Form(""),
     catatan: str = Form(""),
 ):
     wa.send(ADMIN_WA,
-        f"🔔 *Pendaftaran Baru vpntunel.my.id*\n\n"
-        f"Nama: {nama}\nNo WA: {nomor_wa}\nPaket: {paket}\n"
-        f"Protokol: {protokol or 'Belum dipilih'}\n"
-        f"Catatan: {catatan or '-'}\n\nSilakan proses di panel.vpntunel.my.id"
+        f"🔔 *Pendaftaran ISP Baru — VPNTunel Billing*\n\n"
+        f"🏢 ISP: *{nama_isp}*\n"
+        f"👤 Pemilik: {nama_pemilik}\n"
+        f"📱 WA: {nomor_wa}\n"
+        f"📍 Kota: {kota}\n"
+        f"📦 Paket: {paket}\n"
+        f"👥 Est. Pelanggan: {estimasi_pelanggan or '-'}\n"
+        f"📝 Catatan: {catatan or '-'}\n\n"
+        f"Silakan proses aktivasi di billing.vpntunel.my.id"
     )
     return templates.TemplateResponse(request=request, name="daftar.html", context={
-        "success": True, "nama": nama,
+        "success": True, "nama_isp": nama_isp, "nama_pemilik": nama_pemilik,
     })
 
 
