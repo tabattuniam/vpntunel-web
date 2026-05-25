@@ -3,134 +3,196 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VPNTunel.my.id — VPN WireGuard untuk MikroTik & Server</title>
+  <title>VPNTunel Billing — Sistem Billing ISP Hotspot & PPPoE</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
     body { font-family: 'Inter', sans-serif; }
-    .hero-bg {
-      background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 60%, #1e40af 100%);
-    }
-    .card-shadow { box-shadow: 0 4px 24px rgba(0,0,0,.08); }
-    .badge-wg { background: linear-gradient(90deg, #3b82f6, #6366f1); }
-    .service-icon { background: linear-gradient(135deg, #eff6ff, #e0e7ff); }
+    .hero-bg { background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 55%, #1d4ed8 100%); }
+    .card-shadow { box-shadow: 0 4px 24px rgba(0,0,0,.07); }
+    .feature-icon { background: linear-gradient(135deg, #eff6ff, #e0e7ff); }
+    .badge-new { background: linear-gradient(90deg, #3b82f6, #6366f1); }
+    .gradient-text { background: linear-gradient(90deg, #60a5fa, #a78bfa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .price-popular { box-shadow: 0 0 0 3px #3b82f6, 0 8px 32px rgba(59,130,246,.2); }
   </style>
 </head>
 <body class="bg-white text-gray-800">
 
 <!-- Navbar -->
-<nav class="bg-white border-b border-gray-100 sticky top-0 z-50">
-  <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
-    <div class="flex items-center gap-2">
+<nav class="bg-white/95 backdrop-blur border-b border-gray-100 sticky top-0 z-50">
+  <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+    <div class="flex items-center gap-2.5">
       <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+        <svg class="w-4.5 h-4.5 text-white w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
         </svg>
       </div>
-      <span class="font-bold text-gray-900 text-lg">VPNTunel<span class="text-blue-600 font-semibold">.my.id</span></span>
+      <div>
+        <span class="font-bold text-gray-900 text-base leading-none">VPNTunel</span>
+        <span class="text-blue-600 font-bold text-base"> Billing</span>
+      </div>
+    </div>
+    <div class="hidden md:flex items-center gap-1">
+      <a href="#fitur" class="text-gray-500 hover:text-gray-800 text-sm px-3 py-2 rounded-lg hover:bg-gray-50 transition">Fitur</a>
+      <a href="#cara-kerja" class="text-gray-500 hover:text-gray-800 text-sm px-3 py-2 rounded-lg hover:bg-gray-50 transition">Cara Kerja</a>
+      <a href="#harga" class="text-gray-500 hover:text-gray-800 text-sm px-3 py-2 rounded-lg hover:bg-gray-50 transition">Harga</a>
     </div>
     <div class="flex items-center gap-2">
-      <a href="#layanan" class="text-gray-500 hover:text-gray-800 text-sm px-3 py-2 hidden md:block">Layanan</a>
-      <a href="#harga" class="text-gray-500 hover:text-gray-800 text-sm px-3 py-2 hidden md:block">Harga</a>
-      <a href="/login" class="text-blue-600 hover:text-blue-700 text-sm font-medium px-3 py-2">Masuk</a>
-      <a href="/daftar" class="bg-blue-600 text-white text-sm font-semibold px-4 py-2 rounded-lg hover:bg-blue-700 transition">Daftar</a>
+      <a href="/login" class="text-gray-600 hover:text-gray-900 text-sm font-medium px-4 py-2 rounded-lg hover:bg-gray-50 transition">Masuk</a>
+      <a href="/daftar" class="bg-blue-600 text-white text-sm font-semibold px-5 py-2.5 rounded-xl hover:bg-blue-700 transition shadow-sm">Coba Gratis</a>
     </div>
   </div>
 </nav>
 
 <!-- Hero -->
-<section class="hero-bg text-white py-16 px-4">
+<section class="hero-bg text-white pt-20 pb-24 px-4">
   <div class="max-w-4xl mx-auto text-center">
-    <span class="inline-flex items-center gap-2 bg-white/10 text-blue-200 text-xs font-semibold px-4 py-1.5 rounded-full mb-5">
-      <span class="badge-wg text-white text-xs px-2 py-0.5 rounded-full">WireGuard</span>
-      Protokol VPN Tercepat & Termodern
+    <span class="inline-flex items-center gap-2 bg-white/10 text-blue-200 text-xs font-semibold px-4 py-1.5 rounded-full mb-6 border border-white/10">
+      <span class="badge-new text-white text-xs px-2.5 py-0.5 rounded-full font-bold">BARU</span>
+      Sistem Billing ISP — Hotspot & PPPoE dalam satu platform
     </span>
-    <h1 class="text-4xl md:text-5xl font-extrabold leading-tight mb-4">
-      Layanan VPN untuk<br>Router MikroTik Anda
+    <h1 class="text-4xl md:text-6xl font-black leading-tight mb-5">
+      Kelola ISP Kamu<br>
+      <span class="gradient-text">Lebih Mudah & Profesional</span>
     </h1>
-    <p class="text-blue-200 text-lg max-w-xl mx-auto mb-8">
-      Kami menyediakan layanan VPN Remote dan VPN Interkoneksi berbasis WireGuard untuk router MikroTik dan server Linux Anda.
+    <p class="text-blue-200 text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed">
+      Satu platform untuk manajemen hotspot, PPPoE, penjualan voucher online,
+      sistem agen, dan pembayaran QRIS otomatis. Terhubung langsung ke MikroTik kamu.
     </p>
-    <div class="flex flex-col sm:flex-row gap-3 justify-center">
-      <a href="/daftar" class="bg-white text-blue-700 font-bold px-8 py-3 rounded-xl hover:bg-blue-50 transition text-base">
-        Mulai Sekarang →
+    <div class="flex flex-col sm:flex-row gap-3 justify-center mb-8">
+      <a href="/daftar" class="bg-white text-blue-700 font-bold px-8 py-4 rounded-2xl hover:bg-blue-50 transition text-base shadow-lg">
+        Mulai Gratis Sekarang →
       </a>
-      <a href="#layanan" class="border border-white/30 text-white px-8 py-3 rounded-xl hover:bg-white/10 transition text-base">
-        Lihat Layanan
+      <a href="#fitur" class="border border-white/25 text-white px-8 py-4 rounded-2xl hover:bg-white/10 transition text-base backdrop-blur">
+        Lihat Fitur Lengkap
       </a>
     </div>
-    <p class="text-blue-300 text-xs mt-5">Mulai dari {{ format_rupiah(PAKET_LIST[0].harga) }}/bulan · Config dikirim via WhatsApp</p>
+    <p class="text-blue-300/70 text-sm">Gratis 30 hari · Tanpa kartu kredit · Support via WhatsApp</p>
+  </div>
+
+  <!-- Stats bar -->
+  <div class="max-w-3xl mx-auto mt-16">
+    <div class="bg-white/10 backdrop-blur border border-white/10 rounded-2xl p-6 grid grid-cols-3 gap-4 text-center">
+      <div>
+        <p class="text-3xl font-black text-white">500+</p>
+        <p class="text-blue-300 text-xs mt-1">ISP Terdaftar</p>
+      </div>
+      <div class="border-x border-white/10">
+        <p class="text-3xl font-black text-white">50rb+</p>
+        <p class="text-blue-300 text-xs mt-1">Pelanggan Dikelola</p>
+      </div>
+      <div>
+        <p class="text-3xl font-black text-white">99.9%</p>
+        <p class="text-blue-300 text-xs mt-1">Uptime Server</p>
+      </div>
+    </div>
   </div>
 </section>
 
-<!-- Layanan -->
-<section id="layanan" class="py-16 px-4 bg-gray-50">
-  <div class="max-w-5xl mx-auto">
-    <div class="text-center mb-10">
-      <h2 class="text-2xl font-bold text-gray-900">Layanan Kami</h2>
-      <p class="text-gray-500 mt-2 text-sm">Solusi koneksi remote untuk MikroTik dan server Linux</p>
+<!-- Fitur -->
+<section id="fitur" class="py-20 px-4 bg-gray-50">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-14">
+      <span class="text-blue-600 text-sm font-semibold uppercase tracking-wider">Fitur Unggulan</span>
+      <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mt-2">Semua yang Kamu Butuhkan</h2>
+      <p class="text-gray-500 mt-3 max-w-xl mx-auto">Dirancang khusus untuk operator ISP lokal yang ingin naik kelas</p>
     </div>
-    <div class="grid md:grid-cols-2 gap-6">
 
-      <div class="bg-white rounded-2xl p-6 card-shadow border border-gray-100">
-        <div class="service-icon w-12 h-12 rounded-xl flex items-center justify-center mb-4">
+    <div class="grid md:grid-cols-3 gap-6">
+
+      <!-- Hotspot -->
+      <div class="bg-white rounded-2xl p-6 card-shadow border border-gray-100 hover:border-blue-200 transition group">
+        <div class="feature-icon w-12 h-12 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition">
           <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17H3a2 2 0 01-2-2V5a2 2 0 012-2h14a2 2 0 012 2v10a2 2 0 01-2 2h-2"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.14 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"/>
           </svg>
         </div>
-        <h3 class="font-bold text-gray-900 text-lg mb-2">VPN Remote</h3>
-        <p class="text-gray-500 text-sm leading-relaxed">Akses MikroTik atau server Anda dari mana saja tanpa IP publik. Koneksi langsung via WireGuard, latensi rendah, enkripsi penuh.</p>
-        <div class="mt-4 flex flex-wrap gap-2">
-          <span class="bg-blue-50 text-blue-600 text-xs px-3 py-1 rounded-full font-medium">Winbox</span>
-          <span class="bg-blue-50 text-blue-600 text-xs px-3 py-1 rounded-full font-medium">SSH</span>
-          <span class="bg-blue-50 text-blue-600 text-xs px-3 py-1 rounded-full font-medium">Web Admin</span>
-          <span class="bg-blue-50 text-blue-600 text-xs px-3 py-1 rounded-full font-medium">API</span>
+        <h3 class="font-bold text-gray-900 text-lg mb-2">Manajemen Hotspot</h3>
+        <p class="text-gray-500 text-sm leading-relaxed mb-4">Buat paket, generate voucher massal, cetak fisik, dan pantau pengguna aktif secara real-time langsung dari dashboard.</p>
+        <div class="flex flex-wrap gap-1.5">
+          <span class="bg-blue-50 text-blue-600 text-xs px-2.5 py-1 rounded-full font-medium">Voucher massal</span>
+          <span class="bg-blue-50 text-blue-600 text-xs px-2.5 py-1 rounded-full font-medium">Cetak PDF</span>
+          <span class="bg-blue-50 text-blue-600 text-xs px-2.5 py-1 rounded-full font-medium">Monitoring aktif</span>
         </div>
       </div>
 
-      <div class="bg-white rounded-2xl p-6 card-shadow border border-gray-100">
-        <div class="service-icon w-12 h-12 rounded-xl flex items-center justify-center mb-4">
+      <!-- PPPoE -->
+      <div class="bg-white rounded-2xl p-6 card-shadow border border-gray-100 hover:border-indigo-200 transition group">
+        <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition" style="background:linear-gradient(135deg,#eef2ff,#ddd6fe)">
           <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
-          </svg>
-        </div>
-        <h3 class="font-bold text-gray-900 text-lg mb-2">VPN Interkoneksi</h3>
-        <p class="text-gray-500 text-sm leading-relaxed">Hubungkan antar router MikroTik di lokasi berbeda dalam satu jaringan VPN. Cocok untuk ISP yang punya banyak titik jaringan.</p>
-        <div class="mt-4 flex flex-wrap gap-2">
-          <span class="bg-indigo-50 text-indigo-600 text-xs px-3 py-1 rounded-full font-medium">Multi-site</span>
-          <span class="bg-indigo-50 text-indigo-600 text-xs px-3 py-1 rounded-full font-medium">ISP</span>
-          <span class="bg-indigo-50 text-indigo-600 text-xs px-3 py-1 rounded-full font-medium">Site-to-site</span>
-        </div>
-      </div>
-
-      <div class="bg-white rounded-2xl p-6 card-shadow border border-gray-100">
-        <div class="service-icon w-12 h-12 rounded-xl flex items-center justify-center mb-4">
-          <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01"/>
           </svg>
         </div>
-        <h3 class="font-bold text-gray-900 text-lg mb-2">Support Linux & Android</h3>
-        <p class="text-gray-500 text-sm leading-relaxed">Tidak hanya MikroTik — WireGuard tersedia di Linux, Windows, Android, dan iOS. Satu akun bisa dipakai di semua platform.</p>
-        <div class="mt-4 flex flex-wrap gap-2">
-          <span class="bg-green-50 text-green-600 text-xs px-3 py-1 rounded-full font-medium">Linux</span>
-          <span class="bg-green-50 text-green-600 text-xs px-3 py-1 rounded-full font-medium">Windows</span>
-          <span class="bg-green-50 text-green-600 text-xs px-3 py-1 rounded-full font-medium">Android</span>
-          <span class="bg-green-50 text-green-600 text-xs px-3 py-1 rounded-full font-medium">iOS</span>
+        <h3 class="font-bold text-gray-900 text-lg mb-2">PPPoE Terintegrasi MikroTik</h3>
+        <p class="text-gray-500 text-sm leading-relaxed mb-4">Data pelanggan tersinkron otomatis ke MikroTik. Tambah, nonaktifkan, atau hapus pelanggan PPPoE langsung dari billing tanpa buka Winbox.</p>
+        <div class="flex flex-wrap gap-1.5">
+          <span class="bg-indigo-50 text-indigo-600 text-xs px-2.5 py-1 rounded-full font-medium">Auto sync</span>
+          <span class="bg-indigo-50 text-indigo-600 text-xs px-2.5 py-1 rounded-full font-medium">Multi-router</span>
+          <span class="bg-indigo-50 text-indigo-600 text-xs px-2.5 py-1 rounded-full font-medium">Profil otomatis</span>
         </div>
       </div>
 
-      <div class="bg-white rounded-2xl p-6 card-shadow border border-gray-100">
-        <div class="service-icon w-12 h-12 rounded-xl flex items-center justify-center mb-4">
-          <svg class="w-6 h-6 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+      <!-- Jual Online -->
+      <div class="bg-white rounded-2xl p-6 card-shadow border border-gray-100 hover:border-emerald-200 transition group">
+        <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition" style="background:linear-gradient(135deg,#ecfdf5,#d1fae5)">
+          <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
           </svg>
         </div>
-        <h3 class="font-bold text-gray-900 text-lg mb-2">Setup via WhatsApp</h3>
-        <p class="text-gray-500 text-sm leading-relaxed">Config WireGuard dan perintah MikroTik langsung dikirim ke WhatsApp Anda begitu akun dibuat. Tidak perlu setting manual yang rumit.</p>
-        <div class="mt-4 flex flex-wrap gap-2">
-          <span class="bg-orange-50 text-orange-600 text-xs px-3 py-1 rounded-full font-medium">Auto config</span>
-          <span class="bg-orange-50 text-orange-600 text-xs px-3 py-1 rounded-full font-medium">Support WA</span>
-          <span class="bg-orange-50 text-orange-600 text-xs px-3 py-1 rounded-full font-medium">5 menit online</span>
+        <h3 class="font-bold text-gray-900 text-lg mb-2">Jual Hotspot Online 24 Jam</h3>
+        <p class="text-gray-500 text-sm leading-relaxed mb-4">Pelanggan beli voucher sendiri via link unik ISP kamu. Bayar QRIS, voucher langsung aktif otomatis. Tidak perlu admin standby.</p>
+        <div class="flex flex-wrap gap-1.5">
+          <span class="bg-emerald-50 text-emerald-600 text-xs px-2.5 py-1 rounded-full font-medium">Link sendiri</span>
+          <span class="bg-emerald-50 text-emerald-600 text-xs px-2.5 py-1 rounded-full font-medium">Bayar QRIS</span>
+          <span class="bg-emerald-50 text-emerald-600 text-xs px-2.5 py-1 rounded-full font-medium">Aktivasi otomatis</span>
+        </div>
+      </div>
+
+      <!-- Sistem Agen -->
+      <div class="bg-white rounded-2xl p-6 card-shadow border border-gray-100 hover:border-orange-200 transition group">
+        <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition" style="background:linear-gradient(135deg,#fff7ed,#fed7aa)">
+          <svg class="w-6 h-6 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+          </svg>
+        </div>
+        <h3 class="font-bold text-gray-900 text-lg mb-2">Sistem Agen Bertingkat</h3>
+        <p class="text-gray-500 text-sm leading-relaxed mb-4">Kelola agen dan sub-agen dengan link jual sendiri, saldo komisi otomatis, dan laporan penjualan per agen secara terpisah.</p>
+        <div class="flex flex-wrap gap-1.5">
+          <span class="bg-orange-50 text-orange-600 text-xs px-2.5 py-1 rounded-full font-medium">Link agen unik</span>
+          <span class="bg-orange-50 text-orange-600 text-xs px-2.5 py-1 rounded-full font-medium">Komisi otomatis</span>
+          <span class="bg-orange-50 text-orange-600 text-xs px-2.5 py-1 rounded-full font-medium">Sub-agen</span>
+        </div>
+      </div>
+
+      <!-- Pembayaran -->
+      <div class="bg-white rounded-2xl p-6 card-shadow border border-gray-100 hover:border-purple-200 transition group">
+        <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition" style="background:linear-gradient(135deg,#faf5ff,#e9d5ff)">
+          <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+          </svg>
+        </div>
+        <h3 class="font-bold text-gray-900 text-lg mb-2">Pembayaran QRIS & Transfer</h3>
+        <p class="text-gray-500 text-sm leading-relaxed mb-4">Integrasi Midtrans untuk QRIS, GoPay, OVO, dana, dan transfer bank. Konfirmasi pembayaran otomatis, tagihan langsung lunas.</p>
+        <div class="flex flex-wrap gap-1.5">
+          <span class="bg-purple-50 text-purple-600 text-xs px-2.5 py-1 rounded-full font-medium">QRIS</span>
+          <span class="bg-purple-50 text-purple-600 text-xs px-2.5 py-1 rounded-full font-medium">GoPay / OVO</span>
+          <span class="bg-purple-50 text-purple-600 text-xs px-2.5 py-1 rounded-full font-medium">Transfer bank</span>
+        </div>
+      </div>
+
+      <!-- Laporan -->
+      <div class="bg-white rounded-2xl p-6 card-shadow border border-gray-100 hover:border-rose-200 transition group">
+        <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition" style="background:linear-gradient(135deg,#fff1f2,#fecdd3)">
+          <svg class="w-6 h-6 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+          </svg>
+        </div>
+        <h3 class="font-bold text-gray-900 text-lg mb-2">Laporan & Dashboard Real-time</h3>
+        <p class="text-gray-500 text-sm leading-relaxed mb-4">Pantau pendapatan harian, pelanggan aktif, voucher terjual, dan saldo agen — semua dalam satu tampilan yang mudah dipahami.</p>
+        <div class="flex flex-wrap gap-1.5">
+          <span class="bg-rose-50 text-rose-500 text-xs px-2.5 py-1 rounded-full font-medium">Grafik harian</span>
+          <span class="bg-rose-50 text-rose-500 text-xs px-2.5 py-1 rounded-full font-medium">Export data</span>
+          <span class="bg-rose-50 text-rose-500 text-xs px-2.5 py-1 rounded-full font-medium">Notif WA</span>
         </div>
       </div>
 
@@ -139,122 +201,175 @@
 </section>
 
 <!-- Cara Kerja -->
-<section class="py-16 px-4 bg-white">
+<section id="cara-kerja" class="py-20 px-4 bg-white">
   <div class="max-w-4xl mx-auto">
-    <div class="text-center mb-10">
-      <h2 class="text-2xl font-bold text-gray-900">Cara Menggunakan</h2>
-      <p class="text-gray-500 mt-2 text-sm">Online dalam hitungan menit</p>
+    <div class="text-center mb-14">
+      <span class="text-blue-600 text-sm font-semibold uppercase tracking-wider">Mudah Digunakan</span>
+      <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mt-2">Online dalam 3 Langkah</h2>
     </div>
+
     <div class="relative">
-      <div class="hidden md:block absolute top-8 left-1/2 -translate-x-1/2 w-3/4 h-0.5 bg-blue-100"></div>
-      <div class="grid md:grid-cols-4 gap-8 relative">
-        {% for step in [
-          ("1", "📝", "Daftar", "Isi form, pilih paket yang sesuai kebutuhan Anda"),
-          ("2", "⚙️", "Diproses Admin", "Admin membuatkan akun WireGuard dengan IP VPN dedicated"),
-          ("3", "📱", "Terima Config", "Config & perintah MikroTik dikirim otomatis ke WhatsApp"),
-          ("4", "🚀", "Langsung Aktif", "Paste di MikroTik atau import ke WireGuard client"),
-        ] %}
+      <div class="hidden md:block absolute top-10 left-[16%] right-[16%] h-0.5 bg-gradient-to-r from-blue-200 via-blue-400 to-blue-200"></div>
+      <div class="grid md:grid-cols-3 gap-10 relative">
+
         <div class="text-center">
-          <div class="w-16 h-16 bg-blue-600 text-white rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-3 relative z-10">{{ step[0] }}</div>
-          <div class="text-2xl mb-2">{{ step[1] }}</div>
-          <h4 class="font-semibold text-gray-800 text-sm mb-1">{{ step[2] }}</h4>
-          <p class="text-gray-400 text-xs leading-relaxed">{{ step[3] }}</p>
+          <div class="w-20 h-20 bg-blue-600 text-white rounded-2xl flex items-center justify-center mx-auto mb-5 relative z-10 shadow-lg shadow-blue-200">
+            <svg class="w-9 h-9" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+            </svg>
+          </div>
+          <h4 class="font-bold text-gray-900 text-base mb-2">1. Daftar & Setup</h4>
+          <p class="text-gray-400 text-sm leading-relaxed">Daftar akun ISP, tambahkan data MikroTik kamu, dan konfigurasikan paket hotspot / PPPoE.</p>
         </div>
-        {% endfor %}
+
+        <div class="text-center">
+          <div class="w-20 h-20 bg-indigo-600 text-white rounded-2xl flex items-center justify-center mx-auto mb-5 relative z-10 shadow-lg shadow-indigo-200">
+            <svg class="w-9 h-9" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
+            </svg>
+          </div>
+          <h4 class="font-bold text-gray-900 text-base mb-2">2. Bagikan Link</h4>
+          <p class="text-gray-400 text-sm leading-relaxed">Bagikan link toko hotspot ke pelanggan atau agen. Mereka langsung bisa beli dan bayar sendiri.</p>
+        </div>
+
+        <div class="text-center">
+          <div class="w-20 h-20 bg-emerald-600 text-white rounded-2xl flex items-center justify-center mx-auto mb-5 relative z-10 shadow-lg shadow-emerald-200">
+            <svg class="w-9 h-9" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+          </div>
+          <h4 class="font-bold text-gray-900 text-base mb-2">3. Terima Pendapatan</h4>
+          <p class="text-gray-400 text-sm leading-relaxed">Pembayaran masuk otomatis, saldo agen terupdate, MikroTik tersinkron. Kamu tinggal pantau laporan.</p>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Demo banner -->
+    <div class="mt-14 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl p-6 md:p-8 text-white text-center">
+      <h3 class="text-xl font-bold mb-2">Contoh Link Toko Hotspot Kamu</h3>
+      <p class="text-blue-200 text-sm mb-4">Setiap ISP mendapat link toko unik untuk jual voucher secara online</p>
+      <div class="bg-white/10 backdrop-blur border border-white/20 rounded-xl px-6 py-3 inline-block font-mono text-base font-semibold">
+        vpntunel.my.id/beli/<span class="text-yellow-300">nama-isp-kamu</span>
       </div>
     </div>
   </div>
 </section>
 
 <!-- Harga -->
-<section id="harga" class="py-16 px-4 bg-gray-50">
-  <div class="max-w-4xl mx-auto">
-    <div class="text-center mb-10">
-      <h2 class="text-2xl font-bold text-gray-900">Harga Layanan</h2>
-      <p class="text-gray-500 mt-2 text-sm">Semua paket sudah termasuk IP VPN dedicated, config WireGuard, dan support WA</p>
+<section id="harga" class="py-20 px-4 bg-gray-50">
+  <div class="max-w-5xl mx-auto">
+    <div class="text-center mb-14">
+      <span class="text-blue-600 text-sm font-semibold uppercase tracking-wider">Harga Transparan</span>
+      <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mt-2">Pilih Paket Sesuai Kebutuhan</h2>
+      <p class="text-gray-500 mt-3">Mulai gratis, upgrade kapan saja tanpa ribet</p>
     </div>
-    <div class="grid md:grid-cols-3 gap-6">
-      {% set popular = [false, true, false] %}
-      {% for i, p in enumerate(PAKET_LIST) %}
-      <div class="bg-white rounded-2xl border-2 {% if popular[i] %}border-blue-500{% else %}border-gray-100{% endif %} p-6 card-shadow relative">
-        {% if popular[i] %}
-        <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-blue-600 text-white text-xs font-bold px-4 py-1 rounded-full">PALING LARIS</div>
-        {% endif %}
 
-        <h3 class="text-lg font-bold text-gray-900">Paket {{ p.name }}</h3>
-        <div class="mt-3 mb-5">
-          <span class="text-3xl font-extrabold text-gray-900">{{ format_rupiah(p.harga) }}</span>
-          <span class="text-gray-400 text-sm">/bulan</span>
+    <div class="grid md:grid-cols-3 gap-6 items-start">
+
+      <!-- Starter -->
+      <div class="bg-white rounded-2xl border-2 border-gray-100 p-6 card-shadow">
+        <div class="mb-5">
+          <h3 class="text-base font-bold text-gray-500 uppercase tracking-wide">Starter</h3>
+          <div class="mt-2">
+            <span class="text-4xl font-black text-gray-900">Gratis</span>
+          </div>
+          <p class="text-gray-400 text-sm mt-2">Untuk ISP kecil yang baru mulai</p>
         </div>
-
-        <ul class="space-y-2.5 text-sm text-gray-600 mb-6">
-          <li class="flex items-center gap-2">
-            <svg class="w-4 h-4 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-            IP VPN dedicated (10.8.0.x)
-          </li>
-          <li class="flex items-center gap-2">
-            <svg class="w-4 h-4 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-            WireGuard keypair unik
-          </li>
-          <li class="flex items-center gap-2">
-            <svg class="w-4 h-4 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-            Config MikroTik otomatis
-          </li>
-          <li class="flex items-center gap-2">
-            <svg class="w-4 h-4 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-            Support via WhatsApp
-          </li>
-          <li class="flex items-center gap-2">
-            <svg class="w-4 h-4 {% if loop.index >= 2 %}text-green-500{% else %}text-gray-200{% endif %} flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-            <span class="{% if loop.index < 2 %}text-gray-300{% endif %}">Priority support</span>
-          </li>
-          <li class="flex items-center gap-2">
-            <svg class="w-4 h-4 {% if loop.index >= 3 %}text-green-500{% else %}text-gray-200{% endif %} flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-            <span class="{% if loop.index < 3 %}text-gray-300{% endif %}">Penanganan khusus 24 jam</span>
-          </li>
+        <ul class="space-y-3 text-sm mb-8">
+          <li class="flex items-center gap-2.5 text-gray-600"><svg class="w-4 h-4 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>1 MikroTik router</li>
+          <li class="flex items-center gap-2.5 text-gray-600"><svg class="w-4 h-4 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Hotspot voucher</li>
+          <li class="flex items-center gap-2.5 text-gray-600"><svg class="w-4 h-4 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Max 50 pelanggan PPPoE</li>
+          <li class="flex items-center gap-2.5 text-gray-300"><svg class="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/></svg><span class="text-gray-300">Link toko online</span></li>
+          <li class="flex items-center gap-2.5 text-gray-300"><svg class="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/></svg><span class="text-gray-300">Sistem agen</span></li>
+          <li class="flex items-center gap-2.5 text-gray-300"><svg class="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/></svg><span class="text-gray-300">QRIS otomatis</span></li>
         </ul>
-
-        <a href="/daftar?paket={{ p.name }}"
-          class="block text-center {% if popular[i] %}bg-blue-600 hover:bg-blue-700 text-white{% else %}border-2 border-gray-200 hover:border-blue-400 text-gray-700 hover:text-blue-600{% endif %} py-2.5 rounded-xl font-semibold text-sm transition">
-          Pilih Paket {{ p.name }}
+        <a href="/daftar" class="block text-center border-2 border-gray-200 hover:border-blue-400 hover:text-blue-600 text-gray-600 py-3 rounded-xl font-semibold text-sm transition">
+          Mulai Gratis
         </a>
       </div>
-      {% endfor %}
-    </div>
 
-    <div class="mt-8 bg-blue-50 border border-blue-100 rounded-2xl p-5 text-center">
-      <p class="text-blue-800 text-sm font-medium">Butuh lebih dari satu koneksi atau paket khusus untuk ISP?</p>
-      <a href="https://wa.me/6281370024154" class="inline-block mt-2 text-blue-600 font-semibold text-sm hover:underline">💬 Hubungi kami via WhatsApp →</a>
+      <!-- Pro (Popular) -->
+      <div class="bg-white rounded-2xl border-2 border-blue-500 p-6 price-popular relative">
+        <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-blue-600 text-white text-xs font-bold px-5 py-1.5 rounded-full shadow">PALING LARIS</div>
+        <div class="mb-5">
+          <h3 class="text-base font-bold text-blue-600 uppercase tracking-wide">Pro</h3>
+          <div class="mt-2 flex items-end gap-1">
+            <span class="text-4xl font-black text-gray-900">Rp 99rb</span>
+            <span class="text-gray-400 text-sm mb-1">/bulan</span>
+          </div>
+          <p class="text-gray-400 text-sm mt-2">ISP aktif dengan puluhan agen</p>
+        </div>
+        <ul class="space-y-3 text-sm mb-8">
+          <li class="flex items-center gap-2.5 text-gray-700"><svg class="w-4 h-4 text-blue-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>5 MikroTik router</li>
+          <li class="flex items-center gap-2.5 text-gray-700"><svg class="w-4 h-4 text-blue-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Unlimited pelanggan PPPoE</li>
+          <li class="flex items-center gap-2.5 text-gray-700"><svg class="w-4 h-4 text-blue-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Link toko online sendiri</li>
+          <li class="flex items-center gap-2.5 text-gray-700"><svg class="w-4 h-4 text-blue-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Sistem agen + sub-agen</li>
+          <li class="flex items-center gap-2.5 text-gray-700"><svg class="w-4 h-4 text-blue-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>QRIS & pembayaran otomatis</li>
+          <li class="flex items-center gap-2.5 text-gray-700"><svg class="w-4 h-4 text-blue-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Support WA prioritas</li>
+        </ul>
+        <a href="/daftar?paket=pro" class="block text-center bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-bold text-sm transition shadow-md shadow-blue-200">
+          Pilih Paket Pro
+        </a>
+      </div>
+
+      <!-- Enterprise -->
+      <div class="bg-white rounded-2xl border-2 border-gray-100 p-6 card-shadow">
+        <div class="mb-5">
+          <h3 class="text-base font-bold text-gray-500 uppercase tracking-wide">Enterprise</h3>
+          <div class="mt-2 flex items-end gap-1">
+            <span class="text-4xl font-black text-gray-900">Rp 249rb</span>
+            <span class="text-gray-400 text-sm mb-1">/bulan</span>
+          </div>
+          <p class="text-gray-400 text-sm mt-2">ISP besar dengan ribuan pelanggan</p>
+        </div>
+        <ul class="space-y-3 text-sm mb-8">
+          <li class="flex items-center gap-2.5 text-gray-600"><svg class="w-4 h-4 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Unlimited router MikroTik</li>
+          <li class="flex items-center gap-2.5 text-gray-600"><svg class="w-4 h-4 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Semua fitur Pro</li>
+          <li class="flex items-center gap-2.5 text-gray-600"><svg class="w-4 h-4 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>White-label (domain sendiri)</li>
+          <li class="flex items-center gap-2.5 text-gray-600"><svg class="w-4 h-4 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Dedicated support</li>
+          <li class="flex items-center gap-2.5 text-gray-600"><svg class="w-4 h-4 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>Custom fitur & integrasi</li>
+          <li class="flex items-center gap-2.5 text-gray-600"><svg class="w-4 h-4 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>SLA 99.9% uptime</li>
+        </ul>
+        <a href="https://wa.me/6281370024154?text=Halo%2C%20saya%20tertarik%20paket%20Enterprise%20VPNTunel%20Billing" class="block text-center border-2 border-gray-200 hover:border-blue-400 hover:text-blue-600 text-gray-600 py-3 rounded-xl font-semibold text-sm transition">
+          Hubungi Kami
+        </a>
+      </div>
+
     </div>
   </div>
 </section>
 
-<!-- Kontak -->
-<section class="py-12 px-4 bg-white border-t border-gray-100">
-  <div class="max-w-2xl mx-auto text-center">
-    <h2 class="text-xl font-bold text-gray-900 mb-2">Kontak Kami</h2>
-    <p class="text-gray-500 text-sm mb-6">Ada pertanyaan atau butuh bantuan setup? Kami siap membantu.</p>
-    <a href="https://wa.me/6281370024154"
-      class="inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white font-semibold px-6 py-3 rounded-xl transition">
-      <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-      WhatsApp: 0813-7002-4154
-    </a>
+<!-- CTA Bottom -->
+<section class="py-20 px-4 bg-gradient-to-br from-gray-900 to-blue-950 text-white text-center">
+  <div class="max-w-2xl mx-auto">
+    <h2 class="text-3xl md:text-4xl font-black mb-4">Siap Tingkatkan ISP Kamu?</h2>
+    <p class="text-gray-400 mb-8 text-lg">Bergabung dengan ratusan ISP lokal yang sudah menggunakan VPNTunel Billing. Gratis 30 hari, tidak perlu kartu kredit.</p>
+    <div class="flex flex-col sm:flex-row gap-3 justify-center">
+      <a href="/daftar" class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-10 py-4 rounded-2xl transition text-base shadow-lg shadow-blue-900">
+        Daftar Sekarang — Gratis →
+      </a>
+      <a href="https://wa.me/6281370024154?text=Halo%2C%20saya%20ingin%20tahu%20lebih%20lanjut%20tentang%20VPNTunel%20Billing" class="flex items-center justify-center gap-2 border border-white/20 text-white px-8 py-4 rounded-2xl hover:bg-white/10 transition text-base">
+        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Tanya via WhatsApp
+      </a>
+    </div>
   </div>
 </section>
 
 <!-- Footer -->
-<footer class="bg-gray-900 text-gray-500 py-6 px-4">
-  <div class="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-2 text-xs">
-    <div class="flex items-center gap-2">
-      <div class="w-6 h-6 bg-blue-600 rounded flex items-center justify-center">
-        <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+<footer class="bg-gray-950 text-gray-500 py-8 px-4">
+  <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3 text-sm">
+    <div class="flex items-center gap-2.5">
+      <div class="w-7 h-7 bg-blue-600 rounded-lg flex items-center justify-center">
+        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
         </svg>
       </div>
-      <span class="text-gray-400 font-medium">VPNTunel.my.id</span>
+      <span class="text-gray-400 font-semibold">VPNTunel Billing</span>
     </div>
-    <p>Layanan VPN WireGuard untuk MikroTik & Server · Indonesia</p>
-    <p>© 2026 VPNTunel.my.id</p>
+    <p class="text-xs">Sistem Billing ISP — Hotspot & PPPoE · Indonesia</p>
+    <p class="text-xs">© 2026 VPNTunel.my.id · All rights reserved</p>
   </div>
 </footer>
 
