@@ -64,14 +64,17 @@ def _save_registrasi(nama_isp, nama_pemilik, nomor_wa, kota, paket, estimasi, ca
 
 # ── Routes ────────────────────────────────────────────────────────────────────
 
+CTX = {"admin_wa": ADMIN_WA}
+
+
 @app.get("/", response_class=HTMLResponse)
 async def landing(request: Request):
-    return templates.TemplateResponse(request=request, name="landing.html", context={})
+    return templates.TemplateResponse(request=request, name="landing.html", context=CTX)
 
 
 @app.get("/daftar", response_class=HTMLResponse)
 async def daftar_form(request: Request):
-    return templates.TemplateResponse(request=request, name="daftar.html", context={})
+    return templates.TemplateResponse(request=request, name="daftar.html", context=CTX)
 
 
 @app.post("/daftar", response_class=HTMLResponse)
@@ -99,5 +102,5 @@ async def daftar_submit(
         f"Lihat & proses di: https://admin.vpntunel.my.id/registrasi"
     )
     return templates.TemplateResponse(request=request, name="daftar.html", context={
-        "success": True, "nama_isp": nama_isp, "nama_pemilik": nama_pemilik,
+        **CTX, "success": True, "nama_isp": nama_isp, "nama_pemilik": nama_pemilik,
     })
