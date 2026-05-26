@@ -41,6 +41,12 @@ def _wa(nomor: str, pesan: str):
 
 # ── DB helper ─────────────────────────────────────────────────────────────────
 
+def _normalize_wa(nomor: str) -> str:
+    n = nomor.strip().replace("-", "").replace(" ", "")
+    if n.startswith("0"):
+        n = "62" + n[1:]
+    return n
+
 def _save_registrasi(nama_isp, nama_pemilik, nomor_wa, kota, paket, estimasi, catatan):
     try:
         con = sqlite3.connect(BILLING_DB)
@@ -79,6 +85,7 @@ async def daftar_submit(
     estimasi_pelanggan: str = Form(""),
     catatan: str = Form(""),
 ):
+    nomor_wa = _normalize_wa(nomor_wa)
     _save_registrasi(nama_isp, nama_pemilik, nomor_wa, kota, paket, estimasi_pelanggan, catatan)
     _wa(ADMIN_WA,
         f"🔔 *Pendaftaran ISP Baru — VPNTunel Billing*\n\n"
@@ -89,7 +96,7 @@ async def daftar_submit(
         f"📦 Paket: {paket}\n"
         f"👥 Est. Pelanggan: {estimasi_pelanggan or '-'}\n"
         f"📝 Catatan: {catatan or '-'}\n\n"
-        f"Lihat & proses di: https://billing.vpntunel.my.id/registrasi"
+        f"Lihat & proses di: https://admin.vpntunel.my.id/registrasi"
     )
     return templates.TemplateResponse(request=request, name="daftar.html", context={
         "success": True, "nama_isp": nama_isp, "nama_pemilik": nama_pemilik,
