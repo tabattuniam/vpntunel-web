@@ -7,7 +7,7 @@ from pathlib import Path
 
 import yaml
 from fastapi import FastAPI, Form, Request
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 
 logging.basicConfig(level=logging.INFO)
@@ -65,6 +65,11 @@ def _save_registrasi(nama_isp, nama_pemilik, nomor_wa, kota, paket, estimasi, ca
 # ── Routes ────────────────────────────────────────────────────────────────────
 
 CTX = {"admin_wa": ADMIN_WA}
+
+
+@app.get("/beli/{slug}")
+async def redirect_beli(slug: str):
+    return RedirectResponse(f"https://billing.vpntunel.my.id/beli/{slug}", status_code=301)
 
 
 @app.get("/", response_class=HTMLResponse)
