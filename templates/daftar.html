@@ -6,217 +6,260 @@
   <title>Daftar ISP — VPNTunel Billing</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
     body { font-family: 'Inter', sans-serif; }
-    .hero-bg { background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 60%, #1d4ed8 100%); }
+    .hero-bg { background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 55%, #1d4ed8 100%); }
     .input-field {
       width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px;
-      padding: 11px 16px; font-size: 14px; outline: none; transition: border-color .2s, box-shadow .2s;
-      background: #fff;
+      padding: 11px 16px; font-size: 14px; outline: none;
+      transition: border-color .2s, box-shadow .2s; background: #fff;
     }
     .input-field:focus { border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,.12); }
-    .input-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #94a3b8; }
-    .paket-card { cursor: pointer; transition: all .2s; border: 2px solid #e2e8f0; border-radius: 14px; padding: 14px; }
-    .paket-card:has(input:checked) { border-color: #3b82f6; background: #eff6ff; }
-    .paket-card input { display: none; }
-    .step-dot { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; }
+    .input-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #94a3b8; pointer-events: none; }
+    .wa-float { box-shadow: 0 4px 20px rgba(37,211,102,.4); }
   </style>
 </head>
-<body class="hero-bg min-h-screen py-10 px-4">
+<body class="hero-bg min-h-screen">
 
-  <!-- Logo -->
-  <div class="text-center mb-8">
-    <a href="/" class="inline-flex items-center gap-2.5">
-      <div class="w-9 h-9 bg-blue-600 rounded-xl flex items-center justify-center">
-        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
-        </svg>
-      </div>
-      <div class="text-left">
-        <p class="text-white font-bold text-lg leading-none">VPNTunel <span class="text-blue-300">Billing</span></p>
-        <p class="text-blue-400 text-xs">Sistem Billing ISP</p>
-      </div>
-    </a>
-  </div>
+<!-- Navbar tipis -->
+<nav class="px-6 py-4 flex items-center justify-between">
+  <a href="/" class="inline-flex items-center gap-2.5">
+    <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+      <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+      </svg>
+    </div>
+    <span class="text-white font-bold text-base">VPNTunel <span class="text-blue-300">Billing</span></span>
+  </a>
+  <a href="/login" class="text-blue-300 hover:text-white text-sm font-medium transition">Sudah punya akun? Masuk →</a>
+</nav>
 
+<div class="max-w-5xl mx-auto px-4 py-10">
+
+  {% if success %}
+  <!-- ── Sukses ── -->
   <div class="max-w-lg mx-auto">
-
-    {% if success %}
-    <!-- ── Sukses ── -->
-    <div class="bg-white rounded-3xl shadow-2xl p-8 text-center">
-      <div class="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-5">
-        <svg class="w-10 h-10 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
-        </svg>
+    <div class="bg-white rounded-3xl shadow-2xl overflow-hidden">
+      <div class="bg-gradient-to-r from-emerald-500 to-teal-600 px-8 py-8 text-center">
+        <div class="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
+          <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+          </svg>
+        </div>
+        <h2 class="text-2xl font-bold text-white mb-1">Pendaftaran Berhasil!</h2>
+        <p class="text-emerald-100 text-sm">Kami akan menghubungi kamu segera</p>
       </div>
-      <h2 class="text-2xl font-bold text-gray-900 mb-2">Pendaftaran Terkirim!</h2>
-      <p class="text-gray-500 mb-1">Halo <strong class="text-gray-800">{{ nama_pemilik }}</strong>,</p>
-      <p class="text-gray-500 text-sm">Permintaan pendaftaran <strong>{{ nama_isp }}</strong> sudah kami terima. Tim kami akan menghubungi via WhatsApp dalam 1×24 jam untuk aktivasi akun.</p>
 
-      <div class="mt-6 bg-blue-50 border border-blue-100 rounded-2xl p-5 text-left">
-        <p class="font-semibold text-blue-800 text-sm mb-3">Langkah selanjutnya:</p>
-        <div class="space-y-3">
-          {% for step in [
+      <div class="p-7">
+        <div class="bg-gray-50 rounded-2xl p-5 mb-5">
+          <p class="text-gray-600 text-sm mb-0.5">Halo, <strong class="text-gray-800">{{ nama_pemilik }}</strong></p>
+          <p class="text-gray-500 text-sm">Pendaftaran <strong class="text-gray-700">{{ nama_isp }}</strong> sudah kami terima. Admin kami akan menghubungi via WhatsApp dalam waktu singkat untuk aktivasi akun.</p>
+        </div>
+
+        <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">Langkah selanjutnya:</p>
+        <div class="space-y-3 mb-6">
+          {% for num, step in [
             ("1", "Tunggu konfirmasi admin via WhatsApp"),
-            ("2", "Terima kredensial login & setup awal"),
-            ("3", "Tambahkan MikroTik kamu ke dashboard"),
+            ("2", "Terima username & password login"),
+            ("3", "Tambahkan MikroTik ke dashboard"),
             ("4", "Bagikan link toko ke agen & pelanggan"),
           ] %}
           <div class="flex items-center gap-3">
-            <div class="step-dot bg-blue-600 text-white flex-shrink-0">{{ step[0] }}</div>
-            <p class="text-blue-700 text-sm">{{ step[1] }}</p>
+            <div class="w-7 h-7 rounded-full bg-blue-600 flex items-center justify-center flex-shrink-0">
+              <span class="text-white text-xs font-bold">{{ num }}</span>
+            </div>
+            <p class="text-gray-600 text-sm">{{ step }}</p>
           </div>
           {% endfor %}
         </div>
-      </div>
 
-      <div class="mt-5 flex flex-col gap-2.5">
-        <a href="https://wa.me/6281370024154?text=Halo%2C%20saya%20baru%20daftar%20ISP%20{{ nama_isp | urlencode }}%20di%20VPNTunel%20Billing"
+        <a href="https://wa.me/6281370024154?text=Halo%2C%20saya%20baru%20daftar%20ISP%20{{ nama_isp | urlencode }}%20di%20VPNTunel%20Billing.%20Mohon%20segera%20diproses."
           target="_blank"
-          class="flex items-center justify-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-3 rounded-xl text-sm transition">
+          class="w-full flex items-center justify-center gap-2.5 bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3.5 rounded-xl text-sm transition mb-3">
           <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-          Chat Admin WhatsApp
+          Konfirmasi via WhatsApp Sekarang
         </a>
-        <a href="/login" class="text-center text-sm text-blue-600 hover:underline font-medium py-2">Sudah aktif? Masuk ke Dashboard →</a>
+        <a href="/login" class="w-full text-center block text-sm text-blue-600 hover:text-blue-700 font-medium py-2 hover:underline">Sudah aktif? Masuk ke Dashboard →</a>
       </div>
-    </div>
-
-    {% else %}
-    <!-- ── Form Daftar ── -->
-    <div class="bg-white rounded-3xl shadow-2xl overflow-hidden">
-
-      <!-- Header form -->
-      <div class="bg-gradient-to-r from-blue-600 to-indigo-600 px-8 py-6 text-white">
-        <h1 class="text-xl font-bold mb-1">Daftarkan ISP Kamu</h1>
-        <p class="text-blue-200 text-sm">Gratis 30 hari · Tidak perlu kartu kredit · Aktif dalam 1×24 jam</p>
-      </div>
-
-      <form method="post" action="/daftar" class="p-8 space-y-5" onsubmit="handleSubmit(event)">
-
-        <!-- Nama ISP -->
-        <div>
-          <label class="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">Nama ISP / Usaha <span class="text-red-400">*</span></label>
-          <div class="relative">
-            <svg class="input-icon w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
-            </svg>
-            <input type="text" name="nama_isp" required placeholder="Contoh: ISP Nusantara Net"
-              class="input-field pl-9" style="padding-left:36px">
-          </div>
-          <p class="text-xs text-gray-400 mt-1">Ini akan muncul di link toko kamu: vpntunel.my.id/beli/<em>nama-isp</em></p>
-        </div>
-
-        <!-- Nama Pemilik -->
-        <div>
-          <label class="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">Nama Pemilik <span class="text-red-400">*</span></label>
-          <div class="relative">
-            <svg class="input-icon w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-            </svg>
-            <input type="text" name="nama_pemilik" required placeholder="Nama lengkap Anda"
-              class="input-field" style="padding-left:36px">
-          </div>
-        </div>
-
-        <!-- No WA -->
-        <div>
-          <label class="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">Nomor WhatsApp <span class="text-red-400">*</span></label>
-          <div class="relative">
-            <svg class="input-icon w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-            </svg>
-            <input type="text" name="nomor_wa" required placeholder="08xxxxxxxxxx"
-              class="input-field" style="padding-left:36px">
-          </div>
-          <p class="text-xs text-gray-400 mt-1">Admin akan menghubungi via nomor ini</p>
-        </div>
-
-        <!-- Kota -->
-        <div>
-          <label class="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">Kota / Wilayah <span class="text-red-400">*</span></label>
-          <div class="relative">
-            <svg class="input-icon w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
-            </svg>
-            <input type="text" name="kota" required placeholder="Contoh: Makassar, Sulawesi Selatan"
-              class="input-field" style="padding-left:36px">
-          </div>
-        </div>
-
-        <!-- Estimasi pelanggan -->
-        <div>
-          <label class="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">Estimasi Jumlah Pelanggan</label>
-          <select name="estimasi_pelanggan" class="input-field bg-white">
-            <option value="<50">Kurang dari 50 pelanggan</option>
-            <option value="50-200" selected>50 – 200 pelanggan</option>
-            <option value="200-500">200 – 500 pelanggan</option>
-            <option value=">500">Lebih dari 500 pelanggan</option>
-          </select>
-        </div>
-
-        <!-- Pilih Paket -->
-        <div>
-          <label class="block text-xs font-semibold text-gray-600 mb-2 uppercase tracking-wide">Pilih Paket <span class="text-red-400">*</span></label>
-          <div class="grid grid-cols-3 gap-3">
-
-            <label class="paket-card text-center">
-              <input type="radio" name="paket" value="Starter">
-              <p class="text-sm font-bold text-gray-700">Starter</p>
-              <p class="text-blue-600 font-bold text-base mt-1">Gratis</p>
-              <p class="text-gray-400 text-xs mt-1">1 Router · 50 PPPoE</p>
-            </label>
-
-            <label class="paket-card text-center" style="border-color:#3b82f6;background:#eff6ff">
-              <input type="radio" name="paket" value="Pro" checked>
-              <p class="text-sm font-bold text-blue-700">Pro</p>
-              <p class="text-blue-600 font-bold text-base mt-1">99rb/bln</p>
-              <p class="text-blue-500 text-xs mt-1">5 Router · Unlimited</p>
-              <span class="inline-block mt-1.5 bg-blue-600 text-white text-xs px-2 py-0.5 rounded-full">Populer</span>
-            </label>
-
-            <label class="paket-card text-center">
-              <input type="radio" name="paket" value="Enterprise">
-              <p class="text-sm font-bold text-gray-700">Enterprise</p>
-              <p class="text-blue-600 font-bold text-base mt-1">249rb/bln</p>
-              <p class="text-gray-400 text-xs mt-1">∞ Router · White-label</p>
-            </label>
-
-          </div>
-        </div>
-
-        <!-- Catatan -->
-        <div>
-          <label class="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">Catatan Tambahan</label>
-          <textarea name="catatan" rows="2" placeholder="Misal: sudah pakai MikroTik RB450Gx4, butuh integrasi Midtrans..."
-            class="input-field resize-none"></textarea>
-        </div>
-
-        <button type="submit" id="btn-submit"
-          class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-xl transition text-sm flex items-center justify-center gap-2 shadow-lg shadow-blue-200">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
-          </svg>
-          Daftar Sekarang — Gratis
-        </button>
-
-        <p class="text-center text-xs text-gray-400">
-          Sudah punya akun? <a href="/login" class="text-blue-600 hover:underline font-medium">Masuk ke Dashboard →</a>
-        </p>
-
-      </form>
-    </div>
-    {% endif %}
-
-    <div class="text-center mt-5">
-      <a href="/" class="text-blue-300 hover:text-white text-xs transition">← Kembali ke Beranda</a>
     </div>
   </div>
+
+  {% else %}
+  <!-- ── Form Daftar ── -->
+  <div class="grid md:grid-cols-5 gap-8 items-start">
+
+    <!-- Kiri: Trust signals -->
+    <div class="md:col-span-2 text-white space-y-6 pt-2">
+      <div>
+        <h1 class="text-2xl md:text-3xl font-black leading-snug mb-3">
+          Kelola ISP Kamu<br>dari Satu Dashboard
+        </h1>
+        <p class="text-blue-200 text-sm leading-relaxed">
+          Daftar sekarang, aktif hari ini. Kami bantu setup hingga MikroTik kamu terhubung.
+        </p>
+      </div>
+
+      <!-- Benefit list -->
+      <div class="space-y-3.5">
+        {% for icon_d, label in [
+          ("M5 13l4 4L19 7", "Terhubung langsung ke MikroTik"),
+          ("M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2", "Dashboard hotspot & PPPoE terpadu"),
+          ("M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z", "Jual voucher online 24 jam via QRIS"),
+          ("M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z", "Sistem agen & sub-agen otomatis"),
+          ("M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9", "Notifikasi WhatsApp otomatis"),
+        ] %}
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center flex-shrink-0">
+            <svg class="w-4 h-4 text-blue-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ icon_d }}"/>
+            </svg>
+          </div>
+          <span class="text-sm text-blue-100">{{ label }}</span>
+        </div>
+        {% endfor %}
+      </div>
+
+      <!-- Quote -->
+      <div class="bg-white/10 border border-white/15 rounded-2xl p-5 backdrop-blur">
+        <p class="text-blue-100 text-sm leading-relaxed italic mb-3">"Setelah pakai VPNTunel Billing, saya tidak perlu lagi buka Winbox untuk tambah pelanggan PPPoE. Semua dari HP."</p>
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center flex-shrink-0">
+            <span class="text-white text-xs font-bold">AR</span>
+          </div>
+          <div>
+            <p class="text-white text-xs font-semibold">Ahmad Rifa'i</p>
+            <p class="text-blue-400 text-xs">ISP Nusanet, Jepara</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- WA Contact -->
+      <div class="flex items-center gap-3 text-blue-200 text-xs">
+        <svg class="w-4 h-4 text-emerald-400 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Ada pertanyaan? Chat kami langsung di WhatsApp — biasanya balas dalam menit.
+      </div>
+    </div>
+
+    <!-- Kanan: Form -->
+    <div class="md:col-span-3">
+      <div class="bg-white rounded-3xl shadow-2xl overflow-hidden">
+        <div class="bg-gradient-to-r from-blue-600 to-indigo-700 px-7 py-5 text-white">
+          <h2 class="text-lg font-bold mb-0.5">Daftarkan ISP Kamu</h2>
+          <p class="text-blue-200 text-sm">Gratis · Aktif dalam 1×24 jam · Tanpa biaya setup</p>
+        </div>
+
+        <form method="post" action="/daftar" class="p-7 space-y-5" onsubmit="handleSubmit(event)">
+          <input type="hidden" name="paket" value="Pro">
+
+          <!-- Nama ISP -->
+          <div>
+            <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">Nama ISP / Usaha <span class="text-red-400">*</span></label>
+            <div class="relative">
+              <svg class="input-icon w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+              <input type="text" name="nama_isp" required placeholder="Contoh: Nusantara Net"
+                class="input-field" style="padding-left:36px">
+            </div>
+            <p class="text-xs text-gray-400 mt-1.5">Link toko kamu: vpntunel.my.id/beli/<em class="text-blue-400">nama-isp</em></p>
+          </div>
+
+          <!-- Nama Pemilik + WA -->
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">Nama Pemilik <span class="text-red-400">*</span></label>
+              <div class="relative">
+                <svg class="input-icon w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                <input type="text" name="nama_pemilik" required placeholder="Nama lengkap"
+                  class="input-field" style="padding-left:36px">
+              </div>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">No. WhatsApp <span class="text-red-400">*</span></label>
+              <div class="relative">
+                <svg class="input-icon w-4 h-4 text-emerald-500" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                <input type="text" name="nomor_wa" required placeholder="08xxxxxxxxxx"
+                  class="input-field" style="padding-left:36px">
+              </div>
+            </div>
+          </div>
+
+          <!-- Kota + Estimasi -->
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">Kota / Wilayah <span class="text-red-400">*</span></label>
+              <div class="relative">
+                <svg class="input-icon w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                <input type="text" name="kota" required placeholder="Kota, Provinsi"
+                  class="input-field" style="padding-left:36px">
+              </div>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">Estimasi Pelanggan</label>
+              <select name="estimasi_pelanggan" class="input-field bg-white">
+                <option value="<50">Kurang dari 50</option>
+                <option value="50-200" selected>50 – 200</option>
+                <option value="200-500">200 – 500</option>
+                <option value=">500">Lebih dari 500</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Catatan -->
+          <div>
+            <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">Catatan / Informasi Tambahan</label>
+            <textarea name="catatan" rows="2"
+              placeholder="Contoh: sudah pakai MikroTik RB750Gr3, ingin integrasikan QRIS..."
+              class="input-field resize-none"></textarea>
+          </div>
+
+          <!-- Submit -->
+          <button type="submit" id="btn-submit"
+            class="w-full bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-bold py-4 rounded-xl transition text-sm flex items-center justify-center gap-2 shadow-lg shadow-blue-200">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+            </svg>
+            Daftar Sekarang — Gratis
+          </button>
+
+          <!-- Trust badges -->
+          <div class="flex items-center justify-center gap-5 pt-1">
+            <div class="flex items-center gap-1.5 text-gray-400 text-xs">
+              <svg class="w-3.5 h-3.5 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/></svg>
+              Data aman & privat
+            </div>
+            <div class="flex items-center gap-1.5 text-gray-400 text-xs">
+              <svg class="w-3.5 h-3.5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+              Tanpa kartu kredit
+            </div>
+            <div class="flex items-center gap-1.5 text-gray-400 text-xs">
+              <svg class="w-3.5 h-3.5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              Aktif dalam 24 jam
+            </div>
+          </div>
+
+        </form>
+      </div>
+    </div>
+
+  </div>
+  {% endif %}
+
+  <div class="text-center mt-6">
+    <a href="/" class="text-blue-400 hover:text-white text-xs transition">← Kembali ke Beranda</a>
+  </div>
+</div>
+
+<!-- Floating WA Button -->
+<a href="https://wa.me/6281370024154?text=Halo%2C%20saya%20mau%20tanya%20tentang%20pendaftaran%20VPNTunel%20Billing"
+  target="_blank"
+  class="fixed bottom-6 right-6 z-50 flex items-center gap-2.5 bg-emerald-500 hover:bg-emerald-600 text-white text-sm font-bold px-5 py-3.5 rounded-2xl wa-float transition-all hover:scale-105">
+  <svg class="w-5 h-5 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  Tanya via WhatsApp
+</a>
 
 <script>
 function handleSubmit(e) {
   const btn = document.getElementById('btn-submit');
-  btn.innerHTML = `<svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path></svg> Mengirim...`;
+  btn.innerHTML = `<svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path></svg> Mengirim pendaftaran...`;
   btn.disabled = true;
 }
 </script>
