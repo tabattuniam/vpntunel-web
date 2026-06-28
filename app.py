@@ -8,6 +8,7 @@ from pathlib import Path
 import yaml
 from fastapi import FastAPI, Form, Request
 from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
 logging.basicConfig(level=logging.INFO)
@@ -19,6 +20,7 @@ WA_TOKEN   = cfg.get("wuzapi", {}).get("token", "")
 BILLING_DB = "/home/ubuntu/projects/billing-web/data/billing.db"
 
 app       = FastAPI()
+app.mount("/static", StaticFiles(directory=str(Path(__file__).parent / "static")), name="static")
 templates = Jinja2Templates(directory=str(Path(__file__).parent / "templates"))
 
 
@@ -77,6 +79,11 @@ async def landing(request: Request):
     return templates.TemplateResponse(request=request, name="landing.html", context=CTX)
 
 
+@app.get("/masuk", response_class=HTMLResponse)
+async def masuk(request: Request):
+    return templates.TemplateResponse(request=request, name="login.html", context=CTX)
+
+
 @app.get("/daftar", response_class=HTMLResponse)
 async def daftar_form(request: Request):
     return templates.TemplateResponse(request=request, name="daftar.html", context=CTX)
@@ -109,3 +116,14 @@ async def daftar_submit(
     return templates.TemplateResponse(request=request, name="daftar.html", context={
         **CTX, "success": True, "nama_isp": nama_isp, "nama_pemilik": nama_pemilik,
     })
+
+
+# Slug pendek: vpntunel.my.id/{slug} → toko billing ISP
+# Harus paling bawah agar tidak override route di atas
+@app.get("/{slug}/login")
+async def redirect_slug_login(slug: str):
+    return RedirectResponse(f"https://billing.vpntunel.my.id/beli/{slug}/login", status_code=301)
+
+@app.get("/{slug}")
+async def redirect_slug(slug: str):
+    return RedirectResponse(f"https://billing.vpntunel.my.id/beli/{slug}", status_code=301)
